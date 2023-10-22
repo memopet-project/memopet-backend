@@ -8,6 +8,8 @@ public class MemopetApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(MemopetApplication.class, args);
+
+        System.out.println("ddd");
     }
 
 }
