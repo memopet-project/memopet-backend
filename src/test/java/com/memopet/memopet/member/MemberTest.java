@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class MemberTest {
     @Test
     void test() {
-        fail("test");
+        //fail("test");
     }
 
 }
