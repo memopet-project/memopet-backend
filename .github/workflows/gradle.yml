@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "develop" ]
 
@@ -23,9 +23,9 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
-    # 추가
-    - name: Cache Gradle packages
-      uses: actions/cache@v2
+    # gradle caching - 빌드 시간 향상
+    - name: Gradle Caching
+      uses: actions/cache@v3
       with:
         path: |
           ~/.gradle/caches
@@ -65,6 +65,19 @@ jobs:
       run: |
         rm -f ~/.gradle/caches/modules-2/modules-2.lock
         rm -f ~/.gradle/caches/modules-2/gc.properties
+
+    # 환경별 yml 파일 생성(1) - application.yml
+    - name: make application.yml
+      if: |
+        contains(github.ref, 'main') ||
+        contains(github.ref, 'develop')
+      run: |
+        mkdir ./src/main/resources # resources 폴더 생성
+        cd ./src/main/resources # resources 폴더로 이동
+        touch ./application.yml # application.yml 생성
+        echo "${{ secrets.YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
+      shell: bash
+
     
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
