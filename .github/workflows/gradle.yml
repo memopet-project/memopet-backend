@@ -5,16 +5,20 @@ on:
     branches: [ "main", "develop" ]
   pull_request:
     branches: [ "develop" ]
-
+    
+env:
+  AWS_REGION: ap-northeast-2
+  AWS_S3_BUCKET: app-release-files
+  AWS_CODE_DEPLOY_APPLICATION: cicd-memopet-CD
+  AWS_CODE_DEPLOY_GROUP: cicd-memopet-CD-group
+  
 permissions:
   checks: write
   pull-requests: write
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up JDK 17
@@ -56,7 +60,6 @@ jobs:
         report_paths: 'build/test-results/test/TEST-*.xml'
 
 
-        
     # 추가
     - name: Cleanup Gradle Cache
       # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
@@ -110,3 +113,14 @@ jobs:
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
         docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME_ID }}/memopet-dev .
         docker push ${{ secrets.DOCKER_USERNAME_ID }}/memopet-dev
+    # aws 배포    
+    - name: AWS credential 설정
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: ${{ env.AWS_REGION }}
+        aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
+        aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
+    - name: S3에 업로드
+      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip --source .
+    - name: EC2에 배포
+      run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=cicdtest/$GITHUB_SHA.zip,bundleType=zip
