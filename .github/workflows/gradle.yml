@@ -8,7 +8,7 @@ on:
     
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: app-release-files
+  AWS_S3_BUCKET: memopetbucket
   AWS_CODE_DEPLOY_APPLICATION: cicd-memopet-CD
   AWS_CODE_DEPLOY_GROUP: cicd-memopet-CD-group
   
