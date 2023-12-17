@@ -1,4 +1,4 @@
-package com.memopet.memopet;
+package com.memopet.memopet.domain.member.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;

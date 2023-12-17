@@ -1,5 +1,6 @@
-package com.memopet.memopet;
+package com.memopet.memopet.domain.member.entity;
 
+import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

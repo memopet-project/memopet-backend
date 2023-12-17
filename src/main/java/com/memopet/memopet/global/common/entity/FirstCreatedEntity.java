@@ -1,4 +1,4 @@
-package com.memopet.memopet;
+package com.memopet.memopet.global.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
