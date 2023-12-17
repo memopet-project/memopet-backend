@@ -1,14 +1,12 @@
-package com.memopet.memopet;
+package com.memopet.memopet.domain.member.entity;
 
+import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.AuditorAware;
-
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Entity
 @Getter

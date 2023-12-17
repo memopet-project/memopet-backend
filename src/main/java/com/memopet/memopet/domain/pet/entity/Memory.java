@@ -1,11 +1,11 @@
-package com.memopet.memopet;
+package com.memopet.memopet.domain.pet.entity;
 
+import com.memopet.memopet.domain.member.entity.Member;
+import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter

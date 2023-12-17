@@ -1,5 +1,6 @@
-package com.memopet.memopet;
+package com.memopet.memopet.domain.pet.entity;
 
+import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
