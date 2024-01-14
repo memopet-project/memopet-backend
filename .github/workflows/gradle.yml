@@ -43,15 +43,6 @@ jobs:
         echo "${{ secrets.JWT_YML }}"
         echo -n "${{ secrets.JWT_YML }}" >> ./jwt.yml
       
-    - name: Debug YML
-      run: |
-          echo "YML content: $(cat ./application.yml)"
-          
-    - name: Debug JWT_YML
-      run: |
-          echo "JWT_YML content: $(cat ./jwt.yml)"
-
-      
     # gradle caching - 빌드 시간 향상
     - name: Gradle Caching
       uses: actions/cache@v3
