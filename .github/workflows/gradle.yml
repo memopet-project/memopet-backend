@@ -26,37 +26,15 @@ jobs:
     
     # 환경별 yml 파일 생성(1) - application.yml
     - name: make application.yml
-      if: |
-        contains(github.ref, 'main') ||
-        contains(github.ref, 'develop')
       run: |
         cd ./src/main/resources # resources 폴더로 이동
         touch ./application.yml # application.yml 생성
         echo "${{secrets.YML}}"
         echo "${{ secrets.YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
       shell: bash
-      
-    # 환경별 yml 파일 생성(2) - dev
-    - name: make application-dev.yml
-      if: contains(github.ref, 'develop')
-      run: |
-        cd ./src/main/resources
-        touch ./application-dev.yml
-        echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
-      shell: bash
-    
-    # 환경별 yml 파일 생성(3) - prod
-    - name: make application-prod.yml
-      if: contains(github.ref, 'main')
-      run: |
-        cd ./src/main/resources
-        touch ./application-prod.yml
-        echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
-      shell: bash
 
     # JWT환경설정 파일 생성
     - name: make jwt.yml
-      if: contains(github.ref, 'develop')
       run: |
         cd ./src/main/resources
         touch ./jwt.yml
