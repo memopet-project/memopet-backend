@@ -95,7 +95,15 @@ jobs:
         echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
       shell: bash
 
-
+    # JWT환경설정 파일 생성
+    - name: make jwt.yml
+      if: contains(github.ref, 'develop')
+      run: |
+        cd ./src/main/resources
+        touch ./jwt.yml
+        echo "${{ secrets.JWT_YML }}" > ./jwt.yml
+      shell: bash
+      
     # 빌드
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
