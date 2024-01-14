@@ -26,20 +26,16 @@ jobs:
     
     # 환경별 yml 파일 생성(1) - application.yml
     - name: make application.yml
-      run: |
-        cd ./src/main/resources # resources 폴더로 이동
-        touch ./application.yml # application.yml 생성
-        echo "${{secrets.YML}}"
-        echo "${{ secrets.YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
+      run: cd ./src/main/resources 
+      run: touch ./application.yml
+      run: echo "${{ secrets.YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
       shell: bash
 
     # JWT환경설정 파일 생성
     - name: make jwt.yml
-      run: |
-        cd ./src/main/resources
-        touch ./jwt.yml
-        echo "${{secrets.JWT_YML}}"
-        echo "${{ secrets.JWT_YML }}" > ./jwt.yml
+      run: cd ./src/main/resources
+      run: touch ./jwt.yml
+      run: echo "${{ secrets.JWT_YML }}" > ./jwt.yml
       shell: bash
       
     # gradle caching - 빌드 시간 향상
