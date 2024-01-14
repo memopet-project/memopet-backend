@@ -29,7 +29,9 @@ jobs:
       shell: bash
       run: |
           touch ./src/main/resources/application.yml 
-          echo "${{ secrets.YML }}" >> ./application.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
+          echo "${{ secrets.YML }}"
+          echo -n "${{ secrets.YML }}"
+          echo -n "${{ secrets.YML }}" >> ./application.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
       
 
     # JWT환경설정 파일 생성
@@ -37,7 +39,8 @@ jobs:
       shell: bash
       run: |
         touch ./src/main/resources/jwt.yml
-        echo "${{ secrets.JWT_YML }}" >> ./jwt.yml
+        echo "${{ secrets.JWT_YML }}"
+        echo -n "${{ secrets.JWT_YML }}" >> ./jwt.yml
       
       
     # gradle caching - 빌드 시간 향상
