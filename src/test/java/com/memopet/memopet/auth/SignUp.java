@@ -28,11 +28,11 @@ public class SignUp {
     @DisplayName("Sign Up test")
     public void SignUpTest() {
 
-//        String email = "tony123@gmail.com";
-//        String username = "Lee";
-//        String password = "1234";
-//
-//        System.out.println("******email " + email);
+        String email = "tony123@gmail.com";
+        String username = "Lee";
+        String password = "1234";
+
+        System.out.println("******email " + email);
         //Long member_id = authService.join(new SignUpDto(username, password, email));
 
         //Optional<Member> member = memberRepository.findById(member_id);
