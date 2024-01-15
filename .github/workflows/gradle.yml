@@ -31,19 +31,14 @@ jobs:
           touch ./src/main/resources/application.yml 
           echo "${{ secrets.YML }}" > ./application.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
       
+
+
     - name: make jwt.yml
       shell: bash
-      run: touch ./src/main/resources/jwt.yml
-
-    # JWT환경설정 파일 생성
-    - name: Set Yaml
-      uses: microsoft/variable-substitution@v1
-      with:
-        files: ./src/main/resources/jwt.yml 
-      env:
-        header: "Authorization" 
-        secret-key: ${{ secrets.JWT_SECRET_KEY }} 
-        expiration-hours: ${{ secrets.JWT_EXPIRATION_HOURS }}
+      run: |
+          touch src/main/resources/jwt.yml 
+          echo "${{ secrets.JWT_YML }}" > src/main/resources/jwt.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
+      
       
     # gradle caching - 빌드 시간 향상
     - name: Gradle Caching
