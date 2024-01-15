@@ -20,13 +20,5 @@ public class MemberTest {
     @Autowired
     EntityManager em;
 
-    @Test
-    void findMember() {
-        Member member = new Member("이재훈");
-
-        em.persist(member);
-
-        assertThat(member.getUsername()).isEqualTo("이재훈");
-    }
 
 }

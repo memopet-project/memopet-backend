@@ -29,18 +29,15 @@ jobs:
       shell: bash
       run: |
           touch ./src/main/resources/application.yml 
-          echo "${{ secrets.YML }}"
-          echo -n "${{ secrets.YML }}"
-          echo -n "${{ secrets.YML }}" >> ./application.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
+          echo "${{ secrets.YML }}" > ./application.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
       
 
-    # JWT환경설정 파일 생성
+
     - name: make jwt.yml
       shell: bash
       run: |
-        touch ./src/main/resources/jwt.yml
-        echo "${{ secrets.JWT_YML }}"
-        echo -n "${{ secrets.JWT_YML }}" >> ./jwt.yml
+          touch src/main/resources/jwt.yml 
+          echo "${{ secrets.JWT_YML }}" > src/main/resources/jwt.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
       
       
     # gradle caching - 빌드 시간 향상
@@ -95,10 +92,3 @@ jobs:
         arguments: build
 
     
-    # docker build & push to develop
-    - name: Docker build & push to dev
-      if: contains(github.ref, 'develop')
-      run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME_ID }}/memopet-dev .
-        docker push ${{ secrets.DOCKER_USERNAME_ID }}/memopet-dev
