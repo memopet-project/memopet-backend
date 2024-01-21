@@ -33,7 +33,7 @@ public class AuthController {
         String JWTtoken = authService.createToken(authentication);
 
         // store jwt token in response header
-        //HttpHeaders httpHeaders = authService.createHttpHeaders(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + JWTtoken);
+        // HttpHeaders httpHeaders = authService.createHttpHeaders(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + JWTtoken);
 
         // return response body with TokenDto
         return new ResponseEntity<>(new TokenDto(JWTtoken), HttpStatus.OK);

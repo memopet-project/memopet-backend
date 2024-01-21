@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 @SpringBootTest
 @Transactional
 @Rollback(false)
@@ -33,6 +35,8 @@ public class SignUp {
         String password = "1234";
 
         System.out.println("******email " + email);
+        assertThat("123").isEqualTo("1");
+
         //Long member_id = authService.join(new SignUpDto(username, password, email));
 
         //Optional<Member> member = memberRepository.findById(member_id);
