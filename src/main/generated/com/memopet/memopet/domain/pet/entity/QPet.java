@@ -27,31 +27,27 @@ public class QPet extends EntityPathBase<Pet> {
     public final StringPath backImgUrl = createString("backImgUrl");
 
     //inherited
-    public final StringPath createdBy = _super.createdBy;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final DateTimePath<java.time.LocalDateTime> deletedDate = createDateTime("deletedDate", java.time.LocalDateTime.class);
 
-    public final StringPath description = createString("description");
-
     public final EnumPath<Gender> gender = createEnum("gender", Gender.class);
-
-    public final BooleanPath hideStatus = createBoolean("hideStatus");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
 
-    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public final com.memopet.memopet.domain.member.entity.QMember member;
 
-    public final DatePath<java.time.LocalDate> PetBirth = createDate("PetBirth", java.time.LocalDate.class);
+    public final DatePath<java.time.LocalDate> petBirth = createDate("petBirth", java.time.LocalDate.class);
 
-    public final DatePath<java.time.LocalDate> PetDeathDate = createDate("PetDeathDate", java.time.LocalDate.class);
+    public final DatePath<java.time.LocalDate> petDeathDate = createDate("petDeathDate", java.time.LocalDate.class);
+
+    public final StringPath petDesc = createString("petDesc");
 
     public final StringPath petFavs = createString("petFavs");
 
@@ -59,14 +55,11 @@ public class QPet extends EntityPathBase<Pet> {
 
     public final StringPath petFavs3 = createString("petFavs3");
 
-    public final StringPath PetName = createString("PetName");
+    public final StringPath petName = createString("petName");
 
     public final StringPath petProfileUrl = createString("petProfileUrl");
 
     public final QSpecies species;
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
 
     public QPet(String variable) {
         this(Pet.class, forVariable(variable), INITS);

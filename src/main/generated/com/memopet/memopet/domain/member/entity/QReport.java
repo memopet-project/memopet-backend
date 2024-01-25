@@ -24,19 +24,19 @@ public class QReport extends EntityPathBase<Report> {
 
     public final StringPath commentId = createString("commentId");
 
-    public final QMember member;
+    public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
 
-    public final StringPath petSpeciesId = createString("petSpeciesId");
+    public final com.memopet.memopet.domain.pet.entity.QPet pet;
 
     public final NumberPath<Long> report_id = createNumber("report_id", Long.class);
 
     public final StringPath reportCategory = createString("reportCategory");
 
-    public final StringPath reporterId = createString("reporterId");
+    public final StringPath reportedPetId = createString("reportedPetId");
+
+    public final StringPath reporterPetId = createString("reporterPetId");
 
     public final StringPath reportReason = createString("reportReason");
-
-    public final StringPath reportTargetId = createString("reportTargetId");
 
     public QReport(String variable) {
         this(Report.class, forVariable(variable), INITS);
@@ -56,7 +56,7 @@ public class QReport extends EntityPathBase<Report> {
 
     public QReport(Class<? extends Report> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new QMember(forProperty("member"), inits.get("member")) : null;
+        this.pet = inits.isInitialized("pet") ? new com.memopet.memopet.domain.pet.entity.QPet(forProperty("pet"), inits.get("pet")) : null;
     }
 
 }
