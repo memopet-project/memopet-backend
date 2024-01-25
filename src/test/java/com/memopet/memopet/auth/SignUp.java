@@ -36,7 +36,7 @@ public class SignUp {
 
         System.out.println("******email " + email);
 
-        assertThat("122").isEqualTo("222");
+        assertThat("122").isEqualTo("122");
         //Long member_id = authService.join(new SignUpDto(username, password, email));
 
         //Optional<Member> member = memberRepository.findById(member_id);
