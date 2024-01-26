@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Memory extends LastModifiedEntity {
-//meep >:( rawrr!
+//meep >:( rawrr!!
     @Id @GeneratedValue
     @Column(name = "memory_id")
     private Long id;
