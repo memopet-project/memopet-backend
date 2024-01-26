@@ -16,7 +16,7 @@ public class MemoryImage {
     @Column(name = "memory_image_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "memory_id")
     private Memory memory;
 
@@ -35,7 +35,8 @@ public class MemoryImage {
     @Column(name = "image_logical_name")
     private String imageLogicalName;
 
-    // 생성일자
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
