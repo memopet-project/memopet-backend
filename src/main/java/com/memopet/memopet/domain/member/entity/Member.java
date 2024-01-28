@@ -1,57 +1,62 @@
 package com.memopet.memopet.domain.member.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.memopet.memopet.domain.pet.entity.Pet;
+import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
 import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends LastModifiedEntity implements UserDetails, Serializable {
+public class Member extends FirstCreatedEntity implements UserDetails, Serializable {
     private static final long serialVersionUID = 174726374856727L;
-    @Id
-    @GeneratedValue
-    @Column(name = "member_id") // db에 저장될 이름
-    private Long id;
+
+    @Id @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name="uuid2", strategy = "uuid2")
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id;
     @Column(name = "username", nullable = false)
     private String username;
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "encrypt_password", nullable = false)
     private String password;
-    @Column(name = "encrypt_phone_num")
-    private String encryptPhoneNum;
+    @Column(name = "phone_num", nullable = false)
+    private String phoneNum;
+
+    @Column(name = "deactivation_reason_comment")
+    private String deactivationReasonComment;
+
+    @Column(name = "deactivation_reason")
+    private String deactivationReason;
+
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
     @Embedded //해당 클라스에 @Embeddable을 붙여줘야됨
     private Address address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Bookmark bookmark;
-
     @JsonIgnore
-    @Column(name = "activated")
+    @Column(name = "activated", nullable = false)
     private boolean activated;
 
-    @Column(name="authority")
+    @Column(name="authority", nullable = false)
     private Authority authority;
 
-    public Member(String username) {
-        this.username = username;
-    }
+    @OneToMany(mappedBy = "member")
+    private List<Pet> pets = new ArrayList<Pet>();
 
     /**
      *

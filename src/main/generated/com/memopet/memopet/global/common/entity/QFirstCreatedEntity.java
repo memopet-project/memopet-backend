@@ -21,15 +21,13 @@ public class QFirstCreatedEntity extends EntityPathBase<FirstCreatedEntity> {
 
     public final QLastModifiedEntity _super = new QLastModifiedEntity(this);
 
-    public final StringPath createdBy = createString("createdBy");
-
     public final DateTimePath<java.time.LocalDateTime> createdDate = createDateTime("createdDate", java.time.LocalDateTime.class);
 
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
 
     public QFirstCreatedEntity(String variable) {
         super(FirstCreatedEntity.class, forVariable(variable));

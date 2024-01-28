@@ -23,17 +23,17 @@ public class QSpecies extends EntityPathBase<Species> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> largeCategory = createNumber("largeCategory", Long.class);
+    public final StringPath largeCategory = createString("largeCategory");
 
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
 
-    public final NumberPath<Long> midCategory = createNumber("midCategory", Long.class);
-
-    public final NumberPath<Long> smallCategory = createNumber("smallCategory", Long.class);
-
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
+    public final StringPath midCategory = createString("midCategory");
+
+    public final StringPath smallCategory = createString("smallCategory");
 
     public QSpecies(String variable) {
         super(Species.class, forVariable(variable));

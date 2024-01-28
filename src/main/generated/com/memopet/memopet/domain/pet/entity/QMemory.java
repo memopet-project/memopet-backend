@@ -25,9 +25,6 @@ public class QMemory extends EntityPathBase<Memory> {
     public final com.memopet.memopet.global.common.entity.QFirstCreatedEntity _super = new com.memopet.memopet.global.common.entity.QFirstCreatedEntity(this);
 
     //inherited
-    public final StringPath createdBy = _super.createdBy;
-
-    //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final DateTimePath<java.time.LocalDateTime> deletedDate = createDateTime("deletedDate", java.time.LocalDateTime.class);
@@ -39,6 +36,9 @@ public class QMemory extends EntityPathBase<Memory> {
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
     public final NumberPath<Long> likeCount = createNumber("likeCount", Long.class);
 
     public final DateTimePath<java.time.LocalDateTime> memoryDate = createDateTime("memoryDate", java.time.LocalDateTime.class);
@@ -46,9 +46,6 @@ public class QMemory extends EntityPathBase<Memory> {
     public final com.memopet.memopet.domain.member.entity.QMember modifier;
 
     public final StringPath title = createString("title");
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
 
     public QMemory(String variable) {
         this(Memory.class, forVariable(variable), INITS);
