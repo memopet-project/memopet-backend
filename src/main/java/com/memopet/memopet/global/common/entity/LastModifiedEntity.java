@@ -20,5 +20,5 @@ public class LastModifiedEntity  { // DataJpaApplication파일에 @EnableJpaAudi
     private String lastModifiedBy;
 
     @LastModifiedDate
-    private LocalDateTime updateDate;
+    private LocalDateTime lastModifiedDate;
 }
