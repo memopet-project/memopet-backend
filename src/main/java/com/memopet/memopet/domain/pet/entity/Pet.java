@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 public class Pet extends FirstCreatedEntity {
 
-    @Id @GeneratedValue @Column(name = "pet_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pet_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,22 +29,22 @@ public class Pet extends FirstCreatedEntity {
     @JoinColumn(name = "pet_species_id")
     private Species species;
 
-    @Column(name = "pet_name")
-    private String PetName;
+    @Column(name = "pet_name", nullable = false)
+    private String petName;
 
-    @Column(name = "pet_birth")
-    private LocalDate PetBirth;
+    @Column(name = "pet_birth", nullable = false)
+    private LocalDate petBirth;
 
     @Column(name = "pet_death_date")
-    private LocalDate PetDeathDate;
+    private LocalDate petDeathDate;
 
-    @Column(name = "pet_profile_url")
+    @Column(name = "pet_profile_url", nullable = false)
     private String petProfileUrl;
 
     @Column(name = "back_img_url")
     private String backImgUrl;
 
-    @Column(name = "pet_favs")
+    @Column(name = "pet_favs", nullable = false)
     private String petFavs;
 
     @Column(name = "pet_favs2")
@@ -52,25 +53,15 @@ public class Pet extends FirstCreatedEntity {
     @Column(name = "pet_favs3")
     private String petFavs3;
 
-//    @Lob
-    @Column(name = "pet_desc")
-    private String description;
+    @Column(name = "pet_desc", nullable = false)
+    private String petDesc;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Gender gender;
-
-    @Column(name = "hide_Status")
-    private boolean hideStatus;
-
-    @Column(name = "like_count")
-    private int likeCount;
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-    public Pet(Member member, String description) {
-        this.member = member;
-        this.description = description;
-    }
 
 }

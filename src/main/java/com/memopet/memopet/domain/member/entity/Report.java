@@ -1,13 +1,16 @@
 package com.memopet.memopet.domain.member.entity;
 
+import com.memopet.memopet.domain.pet.entity.Pet;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Report {
 
     @Id @GeneratedValue
@@ -17,17 +20,17 @@ public class Report {
     private String reportCategory;
     @Column(name="report_reason")
     private String reportReason;
-    @Column(name="reporter_id")
-    private String reporterId;
-    @Column(name="report_target_id")
-    private String reportTargetId;
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+    @Column(name="reporter_pet_id")
+    private String reporterPetId;
+    @Column(name="reported_pet_id")
+    private String reportedPetId;
     @Column(name="comment_id")
     private String commentId;
-    @Column(name="pet_species_id")
-    private String petSpeciesId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    private Pet pet;
 
     //@ManyToOne(fetch = FetchType.LAZY)
     //private Comment comment;
