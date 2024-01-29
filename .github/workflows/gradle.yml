@@ -65,11 +65,11 @@ jobs:
       run: ./gradlew --info test
 
     # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
-    - name: 테스트 결과 Report
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
+    - name: 🍀 테스트 결과 Report
+      uses: mikepenz/action-junit-report@v3
+      if: always()
       with:
-         files: 'build/test-results/**/*.xml'
+        report_paths: 'build/test-results/test/TEST-*.xml'
 
         
     # 추가
