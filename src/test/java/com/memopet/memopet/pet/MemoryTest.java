@@ -190,7 +190,7 @@ public class MemoryTest {
     BlockedRepository blockedRepository;
     @Test
     public void LikeAndBlock() throws Exception {
-        //맴버-member, pet, species , memory////////////////////
+        //맴버-member, pet, species , memory//////////////////
         Member member = Member.builder()
                 .username("Test")
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
