@@ -1,8 +1,6 @@
 package com.memopet.memopet.domain.pet.entity;
 
-import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
-import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,22 +9,21 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Memory extends LastModifiedEntity {
-//meep >:( rawrr!!
+public class Memory extends FirstCreatedEntity {
     @Id @GeneratedValue
     @Column(name = "memory_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pet_id")
+    @JoinColumn(name = "pet_id", nullable = false)
     private Pet petId;
 
-    @Column(name = "memory_title")
+    @Column(name = "memory_title",nullable = false)
     private String title;
 
-    @Column(name = "memory_date")
+    @Column(name = "memory_date",nullable = false)
     private LocalDateTime memoryDate;
 
     @Column(name = "memory_desc")
@@ -35,14 +32,14 @@ public class Memory extends LastModifiedEntity {
     @Column(name = "like_count")
     private Long likeCount;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
-
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Audience audience;
+
+
 
 
 //    @ManyToOne
@@ -57,3 +54,4 @@ public class Memory extends LastModifiedEntity {
 //
 //    @OneToMany(fetch = FetchType.LAZY)
 //    private List<MemoryImage> memoryImages;
+

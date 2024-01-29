@@ -2,15 +2,13 @@ package com.memopet.memopet.domain.pet.entity;
 
 import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 
 @Entity
 @Builder
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Species extends LastModifiedEntity {
 
@@ -19,12 +17,12 @@ public class Species extends LastModifiedEntity {
     @Column(name = "pet_species_id")
     private Long id;
 
-    @Column(name = "species_large_category")
+    @Column(name = "species_large_category",nullable = false)
     private String largeCategory;
 
     @Column(name = "species_mid_category")
     private String midCategory;
 
-    @Column(name = "species_small_category")
+    @Column(name = "species_small_category",nullable = false)
     private String smallCategory;
 }

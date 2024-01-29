@@ -12,7 +12,7 @@ import java.util.UUID;
 @EnableJpaAuditing
 @SpringBootApplication
 public class MemopetApplication {
-  // git pull pmorigin develop meep!!
+
     public static void main(String[] args) {
         SpringApplication.run(MemopetApplication.class, args);
     }
