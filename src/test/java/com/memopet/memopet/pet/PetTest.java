@@ -52,7 +52,7 @@ public class PetTest {
         Member member = Member.builder()
                 .username("Test")
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
-                .email("jae@gmail.com")
+                .email("test@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
                 .authority(Authority.USER)
                 .activated(true)
@@ -60,7 +60,7 @@ public class PetTest {
 
         Member savedMemeber = memberRepository.save(member);
 
-        Member findMember = memberRepository.findByEmail("jae@gmail.com");
+        Member findMember = memberRepository.findByEmail("test@gmail.com");
 
         System.out.println("member id :" + findMember.getEmail());
         // 반려동물 종 아이디 생성 후 사용
