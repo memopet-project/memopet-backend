@@ -1,4 +1,4 @@
-package com.memopet.memopet.global.common.entity;
+package com.memopet.memopet.domain.pet.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,25 +16,24 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QComment extends EntityPathBase<Comment> {
 
-    private static final long serialVersionUID = 547020587L;
+    private static final long serialVersionUID = -1174878194L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QComment comment1 = new QComment("comment1");
 
-    public final QFirstCreatedEntity _super = new QFirstCreatedEntity(this);
+    public final com.memopet.memopet.global.common.entity.QFirstCreatedEntity _super = new com.memopet.memopet.global.common.entity.QFirstCreatedEntity(this);
 
     public final StringPath comment = createString("comment");
 
-    public final com.memopet.memopet.domain.member.entity.QMember commenterId;
+    public final NumberPath<Long> commenterId = createNumber("commenterId", Long.class);
 
-    //inherited
-    public final StringPath createdBy = _super.createdBy;
+    public final EnumPath<CommentGroup> commentGroup = createEnum("commentGroup", CommentGroup.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final DateTimePath<java.time.LocalDateTime> deleteDate = createDateTime("deleteDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> deletedDate = createDateTime("deletedDate", java.time.LocalDateTime.class);
 
     public final NumberPath<Integer> depth = createNumber("depth", Integer.class);
 
@@ -43,14 +42,14 @@ public class QComment extends EntityPathBase<Comment> {
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
 
-    public final com.memopet.memopet.domain.pet.entity.QMemory memory;
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
+    public final QMemory memory;
 
     public final NumberPath<Long> parentCommentId = createNumber("parentCommentId", Long.class);
 
-    public final com.memopet.memopet.domain.pet.entity.QPet pet;
-
-    //inherited
-    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
+    public final QPet pet;
 
     public QComment(String variable) {
         this(Comment.class, forVariable(variable), INITS);
@@ -70,9 +69,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public QComment(Class<? extends Comment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.commenterId = inits.isInitialized("commenterId") ? new com.memopet.memopet.domain.member.entity.QMember(forProperty("commenterId"), inits.get("commenterId")) : null;
-        this.memory = inits.isInitialized("memory") ? new com.memopet.memopet.domain.pet.entity.QMemory(forProperty("memory"), inits.get("memory")) : null;
-        this.pet = inits.isInitialized("pet") ? new com.memopet.memopet.domain.pet.entity.QPet(forProperty("pet"), inits.get("pet")) : null;
+        this.memory = inits.isInitialized("memory") ? new QMemory(forProperty("memory"), inits.get("memory")) : null;
+        this.pet = inits.isInitialized("pet") ? new QPet(forProperty("pet"), inits.get("pet")) : null;
     }
 
 }

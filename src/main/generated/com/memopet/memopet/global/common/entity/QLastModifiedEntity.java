@@ -21,7 +21,7 @@ public class QLastModifiedEntity extends EntityPathBase<LastModifiedEntity> {
 
     public final StringPath lastModifiedBy = createString("lastModifiedBy");
 
-    public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = createDateTime("lastModifiedDate", java.time.LocalDateTime.class);
 
     public QLastModifiedEntity(String variable) {
         super(LastModifiedEntity.class, forVariable(variable));
