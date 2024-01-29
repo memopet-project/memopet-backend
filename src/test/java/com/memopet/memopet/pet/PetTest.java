@@ -210,7 +210,7 @@ public class PetTest {
 
         Member savedMemeber = memberRepository.save(member);
 
-        Member findMember = memberRepository.findByEmail("jae3@gmail.com");
+        Member findMember = memberRepository.findByEmail("jae2@gmail.com");
 
         System.out.println("member id :" + findMember.getEmail());
         // 반려동물 종 아이디 생성 후 사용
