@@ -35,7 +35,6 @@ public class SignUp {
         String password = "1234";
 
         System.out.println("******email " + email);
-        assertThat("123").isEqualTo("1");
 
         //Long member_id = authService.join(new SignUpDto(username, password, email));
 
