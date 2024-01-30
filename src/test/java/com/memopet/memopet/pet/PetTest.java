@@ -14,6 +14,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @SpringBootTest
 @Transactional
@@ -128,7 +129,13 @@ public class PetTest {
 
         Pet findPet = petRepository.save(pet);
         // 빈 추억 객체 생성
-        Memory memory = Memory.builder().build();
+        Memory memory = Memory.builder()
+                .petId(pet)
+                .title("meepy life")
+                .memoryDate(LocalDateTime.now())
+                .description("MEEP!")
+                .audience(Audience.ALL)
+                .build();
         memoryRepository.save(memory);
         Comment comment =  Comment.builder()
                 .memory(memory)
