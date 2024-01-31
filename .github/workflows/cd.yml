@@ -5,7 +5,9 @@ on:
     branches:
       - production
       - 'releases/**'
-
+  pull_request:
+    branches:
+      - develop
 env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: app-release-files

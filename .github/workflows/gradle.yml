@@ -1,4 +1,3 @@
-
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third party and are governed by
 # separate terms of service, privacy policy, and support
@@ -10,9 +9,6 @@
 name: Java CI with Gradle
 
 on:
-
-  push:
-    branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
 
@@ -20,7 +16,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  test_and_build:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,8 +35,6 @@ jobs:
           touch ./src/main/resources/application.yml 
           echo "${{ secrets.YML }}" > ./application.yml  # github actions에서 설정한 값을 application.yml 파일에 쓰기
       
-
-
     - name: make jwt.yml
       shell: bash
       run: |
@@ -68,18 +62,11 @@ jobs:
       run: ./gradlew --info test
 
     # 테스트 후 Result를 보기위해 Publish Unit Test Results step 추가
-    - name: 테스트 결과 Report
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()  # 테스트가 실패하여도 Report를 보기 위해 `always`로 설정
-      with:
-         files: 'build/test-results/**/*.xml'
-    
-    - name: 테스트 실패 Comment
+    - name: 🍀 테스트 결과 Report
       uses: mikepenz/action-junit-report@v3
       if: always()
       with:
         report_paths: 'build/test-results/test/TEST-*.xml'
-
 
         
     # 추가
@@ -90,12 +77,9 @@ jobs:
       run: |
         rm -f ~/.gradle/caches/modules-2/modules-2.lock
         rm -f ~/.gradle/caches/modules-2/gc.properties
-
-
    
     # 빌드
     - name: Build with Gradle
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
       with:
         arguments: build
-
