@@ -16,12 +16,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-//meepy
 
 @SpringBootTest
 @Transactional
@@ -43,7 +41,7 @@ public class MemoryTest {
         Member member = Member.builder()
                 .username("Test")
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
-                .email("jae@gmail.com")
+                .email("jae5@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
                 .authority(Authority.USER)
                 .activated(true)
