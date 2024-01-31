@@ -56,36 +56,37 @@ public class PetTest {
                 .activated(true)
                 .build();
 
+
         Member savedMemeber = memberRepository.save(member);
 
-        Member findMember= memberRepository.findByEmail("jae@gmail.com");
-//
-//        System.out.println("member id :" + findMember.getEmail());
-//        // 반려동물 종 아이디 생성 후 사용
-//        Species species = Species.builder()
-//                .largeCategory("포유류")
-//                .smallCategory("강아지")
-//                .midCategory("씹덕")
-//                .build();
-//
-//        Species savedSpecies = speciesRepository.save(species);
+        Member findMember = memberRepository.findByEmail("jae@gmail.com");
 
-//        // create user object
-//        Pet pet = Pet.builder()
-//                .species(savedSpecies)
-//                .member(findMember)
-//                .petName("방울이")
-//                .petBirth(LocalDate.now())
-//                .petProfileUrl("https://images.unsplash.com/photo-1528301721190-186c3bd85418?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D")
-//                .petFavs("밥먹기")
-//                .petDesc("우리 방울이는 밥먹기를 너무 좋아하는 친구입니다.")
-//                .gender(Gender.F)
-//                .build();
-//
-//        Pet findPet = petRepository.save(pet);
-//
-//        System.out.println(">>createdDate="+ findPet.getCreatedDate() + ", modifiedDate=" + findPet.getLastModifiedDate());
-//        System.out.println(">>findPet="+ findPet.toString());
+        System.out.println("member id :" + findMember.getEmail());
+        // 반려동물 종 아이디 생성 후 사용
+        Species species = Species.builder()
+                .largeCategory("포유류")
+                .smallCategory("강아지")
+                .midCategory("씹덕")
+                .build();
+
+        Species savedSpecies = speciesRepository.save(species);
+
+        // create user object
+        Pet pet = Pet.builder()
+                .species(savedSpecies)
+                .member(findMember)
+                .petName("방울이")
+                .petBirth(LocalDate.now())
+                .petProfileUrl("https://images.unsplash.com/photo-1528301721190-186c3bd85418?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D")
+                .petFavs("밥먹기")
+                .petDesc("우리 방울이는 밥먹기를 너무 좋아하는 친구입니다.")
+                .gender(Gender.F)
+                .build();
+
+        Pet findPet = petRepository.save(pet);
+
+        System.out.println(">>createdDate="+ findPet.getCreatedDate() + ", modifiedDate=" + findPet.getLastModifiedDate());
+        System.out.println(">>findPet="+ findPet.toString());
     }
 
     /**
