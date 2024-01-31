@@ -19,8 +19,19 @@ permissions:
 jobs:
   test_and_build:
     runs-on: ubuntu-latest
-
     steps:
+    - name: 🍀 서브모듈 추가
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GIT_TOKEN }}
+        submodules: true
+          
+    - name: 🍀 서브모듈 추가
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GIT_TOKEN }}
+        submodules: true
+        
     - uses: actions/checkout@v3
     - name: Set up JDK 17
       uses: actions/setup-java@v3
@@ -62,11 +73,6 @@ jobs:
     - name: Test with Gradle
       run: ./gradlew --info test
 
-    - name: 🍀 테스트 결과 Report
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
-      with:
-        files: 'build/test-results/**/*.xml'
 
     - name: 🍀 테스트 실패 Comment
       uses: mikepenz/action-junit-report@v3
