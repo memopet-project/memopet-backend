@@ -61,14 +61,14 @@ public class PetTest {
         Member findMember = memberRepository.findByEmail("jae@gmail.com");
 
         System.out.println("member id :" + findMember.getEmail());
-        // 반려동물 종 아이디 생성 후 사용
-        Species species = Species.builder()
-                .largeCategory("포유류")
-                .smallCategory("강아지")
-                .midCategory("씹덕")
-                .build();
-
-        Species savedSpecies = speciesRepository.save(species);
+//        // 반려동물 종 아이디 생성 후 사용
+//        Species species = Species.builder()
+//                .largeCategory("포유류")
+//                .smallCategory("강아지")
+//                .midCategory("씹덕")
+//                .build();
+//
+//        Species savedSpecies = speciesRepository.save(species);
 
 //        // create user object
 //        Pet pet = Pet.builder()
