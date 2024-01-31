@@ -41,7 +41,7 @@ public class MemoryTest {
         Member member = Member.builder()
                 .username("Test")
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
-                .email("jae@gmail.com")
+                .email("jae5@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
                 .authority(Authority.USER)
                 .activated(true)
