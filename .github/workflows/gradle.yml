@@ -19,8 +19,13 @@ permissions:
 jobs:
   test_and_build:
     runs-on: ubuntu-latest
-
     steps:
+    - name: 🍀 서브모듈 추가
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GIT_TOKEN }}
+        submodules: true
+        
     - uses: actions/checkout@v3
     - name: Set up JDK 17
       uses: actions/setup-java@v3
