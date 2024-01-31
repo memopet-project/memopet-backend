@@ -10,7 +10,6 @@ name: Java CI with Gradle
 
 on:
   pull_request:
-    types: [ opened, reopened, synchronize ]
     branches: [ "develop" ]
 
 permissions:
@@ -68,7 +67,12 @@ jobs:
     # Gradle test를 실행한다
     - name: Test with Gradle
       run: ./gradlew --info test
-
+      
+    - name: 🍀 테스트 결과 Report
+      uses: mikepenz/action-junit-report@v3
+      if: always()
+      with:
+        report_paths: 'build/test-results/test/TEST-*.xml'
 
     - name: 🍀 테스트 실패 Comment
       uses: mikepenz/action-junit-report@v3
