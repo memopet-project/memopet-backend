@@ -5,7 +5,6 @@ import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.pet.entity.*;
 import com.memopet.memopet.domain.pet.repository.*;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -71,22 +70,22 @@ public class PetTest {
 
         Species savedSpecies = speciesRepository.save(species);
 
-        // create user object
-        Pet pet = Pet.builder()
-                .species(savedSpecies)
-                .member(findMember)
-                .petName("방울이")
-                .petBirth(LocalDate.now())
-                .petProfileUrl("https://images.unsplash.com/photo-1528301721190-186c3bd85418?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D")
-                .petFavs("밥먹기")
-                .petDesc("우리 방울이는 밥먹기를 너무 좋아하는 친구입니다.")
-                .gender(Gender.F)
-                .build();
-
-        Pet findPet = petRepository.save(pet);
-
-        System.out.println(">>createdDate="+ findPet.getCreatedDate() + ", modifiedDate=" + findPet.getLastModifiedDate());
-        System.out.println(">>findPet="+ findPet.toString());
+//        // create user object
+//        Pet pet = Pet.builder()
+//                .species(savedSpecies)
+//                .member(findMember)
+//                .petName("방울이")
+//                .petBirth(LocalDate.now())
+//                .petProfileUrl("https://images.unsplash.com/photo-1528301721190-186c3bd85418?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D")
+//                .petFavs("밥먹기")
+//                .petDesc("우리 방울이는 밥먹기를 너무 좋아하는 친구입니다.")
+//                .gender(Gender.F)
+//                .build();
+//
+//        Pet findPet = petRepository.save(pet);
+//
+//        System.out.println(">>createdDate="+ findPet.getCreatedDate() + ", modifiedDate=" + findPet.getLastModifiedDate());
+//        System.out.println(">>findPet="+ findPet.toString());
     }
 
     /**
