@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -57,6 +58,7 @@ public class PetTest {
                 .build();
 
         Member savedMemeber = memberRepository.save(member);
+        memberRepository.flush();
 
         Member findMember = memberRepository.findByEmail("jae3@gmail.com");
 
