@@ -48,6 +48,7 @@ public class MemberTest {
         System.out.println(">>Authority="+ findMember.getAuthority());
         System.out.println(">>Authority="+ findMember.getAuthorities());
         System.out.println(">>UUID="+ findMember.getId());
+
         // 비밀번호 일치 사용 법
         if (passwordEncoder.matches("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg3",findMember.getPassword())) {
             System.out.println("true");
