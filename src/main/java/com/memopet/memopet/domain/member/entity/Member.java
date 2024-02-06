@@ -3,13 +3,9 @@ package com.memopet.memopet.domain.member.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.memopet.memopet.domain.pet.entity.Pet;
 import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
-import com.memopet.memopet.global.common.entity.LastModifiedEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -20,7 +16,7 @@ import java.util.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Member extends FirstCreatedEntity implements UserDetails, Serializable {
+public class Member extends FirstCreatedEntity implements Serializable {
     private static final long serialVersionUID = 174726374856727L;
 
     @Id @GeneratedValue(generator = "uuid2")
@@ -42,6 +38,12 @@ public class Member extends FirstCreatedEntity implements UserDetails, Serializa
     @Column(name = "deactivation_reason")
     private String deactivationReason;
 
+    @Column(name = "login_fail_count")
+    private int loginFailCount;
+
+    @Column(name = "member_status")
+    private MemberStatus memberStatus;
+
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
@@ -52,63 +54,26 @@ public class Member extends FirstCreatedEntity implements UserDetails, Serializa
     @Column(name = "activated", nullable = false)
     private boolean activated;
 
-    @Column(name="authority", nullable = false)
-    private Authority authority;
+    @Column(name="roles", nullable = false)
+    private String roles;
 
     @OneToMany(mappedBy = "member")
-    private List<Pet> pets = new ArrayList<Pet>();
+    private List<Pet> pets = new ArrayList<>();
 
-    /**
-     *
-     * @return a list of authorities that a member has
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("member"));
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<RefreshTokenEntity> refreshTokens;
+
+    /********** 변경감지용 메서드 **************/
+    public void increaseLoginFailCount(int loginFailCount) {
+        this.loginFailCount = loginFailCount;
+    }
+    public void changeActivity(boolean isActivated) {
+        this.activated = isActivated;
     }
 
-    /**
-     *
-     * @return user's encrypt password
-     */
-    @Override
-    public String getPassword() {
-        return password;
+    public void changeMemberStatus(MemberStatus memberStatus) {
+        this.memberStatus = memberStatus;
     }
 
-    /**
-     *
-     * @return true if the session is expired, if not then false
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
 
-    /**
-     *
-     * @return true if the account is locked, if not then false
-     */
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    /**
-     *
-     * @return true if the password is expired
-     */
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     *
-     * @return true if the account is enabled
-     */
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

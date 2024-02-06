@@ -1,11 +1,10 @@
 package com.memopet.memopet.pet;
 
-import com.memopet.memopet.domain.member.entity.Authority;
+import com.memopet.memopet.domain.member.entity.Roles;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.pet.entity.*;
 import com.memopet.memopet.domain.pet.repository.*;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -99,7 +98,7 @@ public class PetTest {
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae3@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
 
@@ -159,7 +158,7 @@ public class PetTest {
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae1@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
 
@@ -209,7 +208,7 @@ public class PetTest {
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae2@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
 
