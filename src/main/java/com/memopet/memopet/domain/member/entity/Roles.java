@@ -9,5 +9,5 @@ import lombok.*;
 
 public enum Authority {
 
-    USER, ADMIN
+    SCOPE_USER, SCOPE_ADMIN
 }
