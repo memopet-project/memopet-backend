@@ -1,6 +1,6 @@
 package com.memopet.memopet.pet;
 
-import com.memopet.memopet.domain.member.entity.Authority;
+import com.memopet.memopet.domain.member.entity.Roles;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.pet.entity.*;
@@ -45,7 +45,7 @@ public class MemoryTest {
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
         Member findmember = memberRepository.save(member);
@@ -132,7 +132,7 @@ public class MemoryTest {
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
         Member findmember = memberRepository.save(member);
@@ -196,7 +196,7 @@ public class MemoryTest {
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae@gmail.com")
                 .phoneNum(passwordEncoder.encode("01052888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
         Member findmember = memberRepository.save(member);
@@ -235,7 +235,7 @@ public class MemoryTest {
                 .password(passwordEncoder.encode("gdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
                 .email("jae@gmail.com")
                 .phoneNum(passwordEncoder.encode("2222888888"))
-                .authority(Authority.USER)
+                .roles("ROLE_USER")
                 .activated(true)
                 .build();
         Member findmember1 = memberRepository.save(member1);

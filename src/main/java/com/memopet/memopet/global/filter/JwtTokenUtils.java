@@ -1,2 +1,45 @@
-package com.memopet.memopet.global.filter;public class JwtTokenUtils {
+package com.memopet.memopet.global.filter;
+
+import com.memopet.memopet.domain.member.entity.Member;
+import com.memopet.memopet.domain.member.repository.MemberRepository;
+import com.memopet.memopet.domain.member.service.AuthService;
+import com.memopet.memopet.domain.member.service.LoginService;
+import com.memopet.memopet.global.config.UserInfoConfig;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.util.Objects;
+
+@Component
+@RequiredArgsConstructor
+public class JwtTokenUtils {
+
+    public String getUserName(Jwt jwtToken){
+        return jwtToken.getSubject();
+    }
+
+    public boolean isTokenValid(Jwt jwtToken, UserDetails userDetails){
+        final String userName = getUserName(jwtToken);
+        boolean isTokenExpired = getIfTokenIsExpired(jwtToken);
+        boolean isTokenUserSameAsDatabase = userName.equals(userDetails.getUsername());
+        return !isTokenExpired  && isTokenUserSameAsDatabase;
+
+    }
+
+    private boolean getIfTokenIsExpired(Jwt jwtToken) {
+        return Objects.requireNonNull(jwtToken.getExpiresAt()).isBefore(Instant.now());
+    }
+
+    private final MemberRepository memberRepository ;
+    public UserDetails userDetails(String email){
+        return memberRepository
+                .findOneWithAuthoritiesByEmail(email)
+                .map(UserInfoConfig::new)
+                .orElseThrow(()-> new UsernameNotFoundException("UserEmail: "+email+" does not exist"));
+    }
 }

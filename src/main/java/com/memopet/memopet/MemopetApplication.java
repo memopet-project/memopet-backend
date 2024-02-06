@@ -1,7 +1,9 @@
 package com.memopet.memopet;
 
+import com.memopet.memopet.global.config.RSAKeyRecord;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -11,6 +13,7 @@ import java.util.UUID;
 
 @EnableJpaAuditing
 @SpringBootApplication
+@EnableConfigurationProperties(RSAKeyRecord.class)
 public class MemopetApplication {
 
     public static void main(String[] args) {

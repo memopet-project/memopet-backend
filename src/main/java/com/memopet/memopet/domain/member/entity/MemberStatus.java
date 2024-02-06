@@ -1,2 +1,6 @@
-package com.memopet.memopet.domain.member.entity;public class MemberStatus {
+package com.memopet.memopet.domain.member.entity;
+
+public enum MemberStatus {
+
+    NORMAL,LOCKED, BAN
 }

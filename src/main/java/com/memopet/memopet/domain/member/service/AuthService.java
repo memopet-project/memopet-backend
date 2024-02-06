@@ -1,82 +1,42 @@
 package com.memopet.memopet.domain.member.service;
 
 import com.memopet.memopet.domain.member.dto.LoginDto;
+import com.memopet.memopet.domain.member.dto.LoginResponseDto;
 import com.memopet.memopet.domain.member.dto.SignUpDto;
-import com.memopet.memopet.domain.member.entity.Authority;
 import com.memopet.memopet.domain.member.entity.Member;
+import com.memopet.memopet.domain.member.entity.RefreshTokenEntity;
+import com.memopet.memopet.domain.member.mapper.MemberInfoMapper;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
-import com.memopet.memopet.global.common.utils.SecurityUtil;
-import com.memopet.memopet.global.token.TokenProvider;
+import com.memopet.memopet.domain.member.repository.RefreshTokenRepository;
+import com.memopet.memopet.global.token.JwtTokenGenerator;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class AuthService implements UserDetailsService {
+public class AuthService  {
 
-    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final TokenProvider tokenProvider;
-
-
-    @Override
-    @Transactional(readOnly = false)
-    // 로그인시에 DB에서 유저정보와 권한정보를 가져와서 해당 정보를 기반으로 userdetails.User 객체를 생성해 리턴
-    public UserDetails loadUserByUsername(String Email) throws UsernameNotFoundException {
-        System.out.println("loadUserByUsername start with Email : " + Email);
-        return memberRepository.findOneWithAuthoritiesByEmail(Email)
-                .map(member -> createUser(Email, member))
-                .orElseThrow(() -> new UsernameNotFoundException(Email + " -> 데이터베이스에서 찾을 수 없습니다."));
-    }
-
-    private User createUser(String username, Member member) {
-        System.out.println("createUser : " + member);
-        if (!member.isActivated()) {
-            throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
-        }
-
-        List<GrantedAuthority> grantedAuthorities = member.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthority()))
-                .collect(Collectors.toList());
-
-        return new User(member.getEmail(),
-                        member.getPassword(),
-                        grantedAuthorities);
-    }
-
-    // 유저,권한 정보를 가져오는 메소드
-    @Transactional
-    public Optional<Member> getUserWithAuthorities(String Email) {
-        return memberRepository.findOneWithAuthoritiesByEmail(Email);
-    }
-
-    // 현재 securityContext에 저장된 username의 정보만 가져오는 메소드
-    @Transactional
-    public Optional<Member> getMyUserWithAuthorities() {
-        return SecurityUtil.getCurrentEmail()
-                .flatMap(memberRepository::findOneWithAuthoritiesByEmail);
-    }
+    private final JwtTokenGenerator jwtTokenGenerator;
+    private final MemberInfoMapper memberInfoMapper;
 
     /**
      * return the user id if the sign up process is successfully completed
@@ -86,26 +46,132 @@ public class AuthService implements UserDetailsService {
      * @return user_id
      */
     @Transactional(readOnly = false)
-    public String join (SignUpDto signUpDto)  {
-        // add check for email exists in DB
-        if(memberRepository.existsByUsername(signUpDto.getUsername())){
-            return "Email is already taken!";
+    public LoginResponseDto join (SignUpDto signUpDto, HttpServletResponse httpServletResponse)  {
+        try{
+            log.info("[AuthService:registerUser]User Registration Started with :::{}", signUpDto);
+
+            Optional<Member> member = memberRepository.findOneWithAuthoritiesByEmail(signUpDto.getEmail());
+            if(member.isPresent()){
+                throw new Exception("User Already Exist");
+            }
+
+            Member member1 = memberInfoMapper.convertToEntity(signUpDto);
+            Authentication authentication = createAuthenticationObject(member1);
+
+            // Generate a JWT token
+            String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
+            String refreshToken = jwtTokenGenerator.generateRefreshToken(authentication);
+
+            Member savedmember = memberRepository.save(member1);
+            saveUserRefreshToken(savedmember,refreshToken);
+
+            creatRefreshTokenCookie(httpServletResponse,refreshToken);
+
+            log.info("[AuthService:registerUser] User:{} Successfully registered",member1.getUsername());
+            return  LoginResponseDto.builder()
+                    .accessToken(accessToken)
+                    .accessTokenExpiry(5 * 60)
+                    .username(member1.getUsername())
+                    .tokenType("Bearer")
+                    .build();
+
+
+        }catch (Exception e){
+            log.error("[AuthService:registerUser]Exception while registering the user due to :"+e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,e.getMessage());
+        }
+    }
+
+    @Transactional(readOnly = false)
+    public LoginResponseDto getJWTTokensAfterAuthentication(Authentication authentication, HttpServletResponse response) {
+
+        try {
+            var member = memberRepository.findOneWithAuthoritiesByEmail(authentication.getName())
+                    .orElseThrow(()->{
+                        log.error("[AuthService:userSignInAuth] User :{} not found",authentication.getName());
+                        return new ResponseStatusException(HttpStatus.NOT_FOUND,"USER NOT FOUND ");});
+
+            String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
+            String refreshToken = jwtTokenGenerator.generateRefreshToken(authentication);
+
+            creatRefreshTokenCookie(response,refreshToken);
+
+            saveUserRefreshToken(member,refreshToken);
+            log.info("[AuthService:userSignInAuth] Access token for user:{}, has been generated",member.getUsername());
+            return  LoginResponseDto.builder()
+                    .accessToken(accessToken)
+                    .accessTokenExpiry(15 * 1)
+                    .username(member.getUsername())
+                    .tokenType("Bearer")
+                    .build();
+        } catch(Exception e) {
+            log.error("[AuthService:userSignInAuth]Exception while authenticating the user due to :"+e.getMessage());
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Please Try Again");
+        }
+    }
+
+    @Transactional(readOnly = false)
+    private void saveUserRefreshToken(Member member, String refreshToken) {
+        var refreshTokenEntity = RefreshTokenEntity.builder()
+                .member(member)
+                .refreshToken(refreshToken)
+                .revoked(false)
+                .build();
+        refreshTokenRepository.save(refreshTokenEntity);
+    }
+
+    private Cookie creatRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+        Cookie refreshTokenCookie = new Cookie("refresh_token",refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setSecure(true);
+        refreshTokenCookie.setMaxAge(15 * 24 * 60 * 60 ); // in seconds
+        response.addCookie(refreshTokenCookie);
+        return refreshTokenCookie;
+    }
+
+    public Object getAccessTokenUsingRefreshToken(String authorizationHeader) {
+        if(!authorizationHeader.startsWith("Bearer")){
+            return new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Please verify your token type");
         }
 
-        // create user object
-        Member user = Member.builder()
-                .username(signUpDto.getUsername())
-                .password(passwordEncoder.encode(signUpDto.getPassword()))
-                .email(signUpDto.getEmail())
-                .authority(Authority.USER)
-                .activated(true)
+        final String refreshToken = authorizationHeader.substring(7);
+
+        //Find refreshToken from database and should not be revoked : Same thing can be done through filter.
+        var refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken)
+                .filter(tokens-> !tokens.isRevoked())
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Refresh token revoked"));
+
+        Member member = refreshTokenEntity.getMember();
+
+        //Now create the Authentication object
+        Authentication authentication =  createAuthenticationObject(member);
+
+        //Use the authentication object to generate new accessToken as the Authentication object that we will have may not contain correct role.
+        String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
+
+        return  LoginResponseDto.builder()
+                .accessToken(accessToken)
+                .accessTokenExpiry(5 * 60)
+                .username(member.getUsername())
+                .tokenType("Bearer")
                 .build();
 
-        System.out.println("saved member");
-        Member savedMember = memberRepository.save(user);
-
-        return "User registered successfully";
     }
+    private static Authentication createAuthenticationObject(Member member) {
+        // Extract user details from UserDetailsEntity
+        String username = member.getEmail();
+        String password = member.getPassword();
+        String roles = member.getRoles();
+
+        // Extract authorities from roles (comma-separated)
+        String[] roleArray = roles.split(",");
+        GrantedAuthority[] authorities = Arrays.stream(roleArray)
+                .map(role -> (GrantedAuthority) role::trim)
+                .toArray(GrantedAuthority[]::new);
+
+        return new UsernamePasswordAuthenticationToken(username, password, Arrays.asList(authorities));
+    }
+
     public Authentication authenicateUser(LoginDto loginDto) {
         // Created the authentication token
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -118,17 +184,5 @@ public class AuthService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return authentication;
-    }
-
-    public String createToken(Authentication authentication) {
-        // created JWT token by authentication object
-        return tokenProvider.createToken(authentication);
-    }
-
-    public HttpHeaders createHttpHeaders(String authorizationHeader, String headerContent) {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(authorizationHeader, headerContent);
-
-        return httpHeaders;
     }
 }
