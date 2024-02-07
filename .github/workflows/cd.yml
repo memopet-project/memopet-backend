@@ -1,19 +1,16 @@
 name: CICD Test
-run-name: Running
+run-name: Release to AWS
 on:
-  push:
-    branches:
-      - production
-      - 'releases/**'
   pull_request:
     branches:
-      - develop
+      - main
+      
 env:
   AWS_REGION: ap-northeast-2
-  AWS_S3_BUCKET: app-release-files
+  S3_BUCKET_NAME: memopetbucket
   AWS_CODE_DEPLOY_APPLICATION: cicid-test-CD
   AWS_CODE_DEPLOY_GROUP: cicd-test-CD-group
-
+  
 jobs:
   build-with-gradle:
     runs-on: ubuntu-20.04
@@ -31,13 +28,28 @@ jobs:
       run: chmod +x ./gradlew
     - name: 프로젝트 빌드
       run: ./gradlew clean build -x test
+    - name: Make zip file
+      run: zip -r ./practice-deploy.zip .
+      shell: bash
     - name: AWS credential 설정
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: ${{ env.AWS_REGION }}
         aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
-    - name: S3에 업로드
-      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip --source .
-    - name: EC2에 배포
-      run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=cicdtest/$GITHUB_SHA.zip,bundleType=zip
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./practice-deploy.zip s3://$S3_BUCKET_NAME/practice-deploy.zip
+    - name: Code Deploy
+    - run: aws deploy create-deployment --application-name $AWS_CODE_DEPLOY_APPLICATION --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $AWS_CODE_DEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
+
+
+    - name: Generate deployment package
+      run: |
+        mkdir -p before-deploy
+        cp scripts/*.sh before-deploy/
+        cp appspec.yml before-deploy/
+        cp build/libs/*.jar before-deploy/
+        cd before-deploy && zip -r before-deploy *
+        cd ../ && mkdir -p deploy
+        mv before-deploy/before-deploy.zip deploy/$PROJECT_NAME.zip
+      shell: bash
