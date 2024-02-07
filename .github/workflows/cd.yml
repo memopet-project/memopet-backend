@@ -1,13 +1,10 @@
 name: CICD Test
 run-name: Running
 on:
-  push:
-    branches:
-      - production
-      - 'releases/**'
   pull_request:
     branches:
-      - develop
+      - main
+      
 env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: app-release-files
@@ -31,13 +28,15 @@ jobs:
       run: chmod +x ./gradlew
     - name: 프로젝트 빌드
       run: ./gradlew clean build -x test
+    - name: Make zip file
+      run: zip -r ./$GITHUB_SHA.zip .
+      shell: bash
     - name: AWS credential 설정
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-region: ${{ env.AWS_REGION }}
         aws-access-key-id: ${{ secrets.CICD_ACCESS_KEY }}
         aws-secret-access-key: ${{ secrets.CICD_SECRET_KEY }}
-    - name: S3에 업로드
-      run: aws deploy push --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --ignore-hidden-files --s3-location s3://$AWS_S3_BUCKET/cicdtest/$GITHUB_SHA.zip --source .
-    - name: EC2에 배포
-      run: aws deploy create-deployment --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} --s3-location bucket=$AWS_S3_BUCKET,key=cicdtest/$GITHUB_SHA.zip,bundleType=zip
+    - name: Upload to S3
+      run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip
+   
