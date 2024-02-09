@@ -65,6 +65,7 @@ public class MemoryTest {
 
         Pet pet = Pet.builder()
                 .member(member)
+                .petStatus(PetStatus.ACTIVE)
                 .petName("몬뭉이")
                 .gender(Gender.F)
                 .species(species)
@@ -146,6 +147,7 @@ public class MemoryTest {
         //pet에 species 포함시키기.
         Pet pet = Pet.builder()
                 .member(member)
+                .petStatus(PetStatus.ACTIVE)
                 .petName("몬뭉이")
                 .gender(Gender.F)
                 .species(species)
@@ -208,6 +210,7 @@ public class MemoryTest {
         Species findSpecies = speciesRepository.save(species);
         Pet pet = Pet.builder()
                 .member(findmember)
+                .petStatus(PetStatus.ACTIVE)
                 .petName("몬뭉이")
                 .gender(Gender.F)
                 .species(findSpecies)
@@ -247,6 +250,7 @@ public class MemoryTest {
         Species findSpecies1 = speciesRepository.save(species1);
         Pet pet1 = Pet.builder()
                 .member(findmember1)
+                .petStatus(PetStatus.ACTIVE)
                 .petName("애옹이")
                 .gender(Gender.F)
                 .species(species1)

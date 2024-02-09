@@ -117,6 +117,7 @@ public class PetTest {
         Species savedSpecies = speciesRepository.save(species);
         Pet pet = Pet.builder()
                 .species(savedSpecies)
+                .petStatus(PetStatus.ACTIVE)
                 .member(findMember)
                 .petName("방울이")
                 .petBirth(LocalDate.now())
@@ -178,6 +179,7 @@ public class PetTest {
         Pet pet = Pet.builder()
                 .species(savedSpecies)
                 .member(findMember)
+                .petStatus(PetStatus.ACTIVE)
                 .petName("방울이")
                 .petBirth(LocalDate.now())
                 .petProfileUrl("https://images.unsplash.com/photo-1528301721190-186c3bd85418?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D")
@@ -227,6 +229,7 @@ public class PetTest {
         Species savedSpecies = speciesRepository.save(species);
         Pet pet = Pet.builder()
                 .species(savedSpecies)
+                .petStatus(PetStatus.ACTIVE)
                 .member(findMember)
                 .petName("방울이")
                 .petBirth(LocalDate.now())
