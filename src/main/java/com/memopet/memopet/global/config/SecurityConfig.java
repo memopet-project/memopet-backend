@@ -4,6 +4,9 @@ package com.memopet.memopet.global.config;
 import com.memopet.memopet.domain.member.repository.RefreshTokenRepository;
 import com.memopet.memopet.domain.member.service.LoginService;
 import com.memopet.memopet.domain.member.service.LogoutHandlerService;
+import com.memopet.memopet.domain.oauth2.handler.OAuth2AuthenticationFailureHandler;
+import com.memopet.memopet.domain.oauth2.handler.OAuth2AuthenticationSuccessHandler;
+import com.memopet.memopet.domain.oauth2.service.CustomOAuth2UserService;
 import com.memopet.memopet.global.filter.JwtAccessTokenFilter;
 import com.memopet.memopet.global.filter.JwtRefreshTokenFilter;
 import com.memopet.memopet.global.filter.JwtTokenUtils;
@@ -39,6 +42,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
@@ -49,8 +53,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Slf4j
 public class SecurityConfig {
 
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final LoginService loginService;
     private final RSAKeyRecord rsaKeyRecord;
     private final JwtTokenUtils jwtTokenUtils;
@@ -60,6 +62,9 @@ public class SecurityConfig {
     public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Order(1)
     @Bean
@@ -78,9 +83,27 @@ public class SecurityConfig {
                 .httpBasic(withDefaults())
                 .build();
     }
-
-
     @Order(2)
+    @Bean
+    public SecurityFilterChain socialSignInSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
+        return httpSecurity
+                .securityMatcher(new AntPathRequestMatcher("/oauth2/**"))
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth ->
+                        auth.anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(configure ->
+                        configure.redirectionEndpoint(endpoint-> endpoint.baseUri("/oauth2/callback/*"))
+                                .userInfoEndpoint(endpoint -> endpoint.userService(customOAuth2UserService))
+                                .successHandler(oAuth2AuthenticationSuccessHandler)
+                                .failureHandler(oAuth2AuthenticationFailureHandler)
+                )
+                .httpBasic(withDefaults())
+                .build();
+    }
+
+
+    @Order(3)
     @Bean
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
@@ -100,7 +123,7 @@ public class SecurityConfig {
     }
 
 
-    @Order(3)
+    @Order(4)
     @Bean
     public SecurityFilterChain refreshTokenSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
@@ -118,7 +141,7 @@ public class SecurityConfig {
                 .httpBasic(withDefaults())
                 .build();
     }
-    @Order(4)
+    @Order(5)
     @Bean
     public SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
@@ -140,7 +163,7 @@ public class SecurityConfig {
                 })
                 .build();
     }
-    @Order(5)
+    @Order(6)
     @Bean
     public SecurityFilterChain registerSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
@@ -151,7 +174,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
-    @Order(6)
+    @Order(7)
     @Bean
     public SecurityFilterChain h2ConsoleSecurityFilterChainConfig(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity

@@ -56,7 +56,6 @@ public class Pet extends FirstCreatedEntity {
     @Column(name = "pet_desc", nullable = false)
     private String petDesc;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
 
@@ -66,6 +65,5 @@ public class Pet extends FirstCreatedEntity {
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
-
 
 }

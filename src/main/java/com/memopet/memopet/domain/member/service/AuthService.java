@@ -1,8 +1,8 @@
 package com.memopet.memopet.domain.member.service;
 
-import com.memopet.memopet.domain.member.dto.LoginDto;
+import com.memopet.memopet.domain.member.dto.LoginRequestDto;
 import com.memopet.memopet.domain.member.dto.LoginResponseDto;
-import com.memopet.memopet.domain.member.dto.SignUpDto;
+import com.memopet.memopet.domain.member.dto.SignUpRequestDto;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.entity.RefreshTokenEntity;
 import com.memopet.memopet.domain.member.mapper.MemberInfoMapper;
@@ -46,13 +46,13 @@ public class AuthService  {
      * @return user_id
      */
     @Transactional(readOnly = false)
-    public LoginResponseDto join (SignUpDto signUpDto, HttpServletResponse httpServletResponse)  {
+    public LoginResponseDto join (SignUpRequestDto signUpDto, HttpServletResponse httpServletResponse)  {
         try{
             log.info("[AuthService:registerUser]User Registration Started with :::{}", signUpDto);
 
             Optional<Member> member = memberRepository.findOneWithAuthoritiesByEmail(signUpDto.getEmail());
             if(member.isPresent()){
-                throw new Exception("User Already Exist");
+                throw new Exception("User already Exists");
             }
 
             Member member1 = memberInfoMapper.convertToEntity(signUpDto);
@@ -65,7 +65,7 @@ public class AuthService  {
             Member savedmember = memberRepository.save(member1);
             saveUserRefreshToken(savedmember,refreshToken);
 
-            creatRefreshTokenCookie(httpServletResponse,refreshToken);
+            createRefreshTokenCookie(httpServletResponse,refreshToken);
 
             log.info("[AuthService:registerUser] User:{} Successfully registered",member1.getUsername());
             return  LoginResponseDto.builder()
@@ -84,34 +84,33 @@ public class AuthService  {
 
     @Transactional(readOnly = false)
     public LoginResponseDto getJWTTokensAfterAuthentication(Authentication authentication, HttpServletResponse response) {
-
         try {
             var member = memberRepository.findOneWithAuthoritiesByEmail(authentication.getName())
                     .orElseThrow(()->{
-                        log.error("[AuthService:userSignInAuth] User :{} not found",authentication.getName());
+                        log.error("[AuthService:userSignInAuth] User :{} not found", authentication.getName());
                         return new ResponseStatusException(HttpStatus.NOT_FOUND,"USER NOT FOUND ");});
 
             String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
             String refreshToken = jwtTokenGenerator.generateRefreshToken(authentication);
 
-            creatRefreshTokenCookie(response,refreshToken);
+            createRefreshTokenCookie(response,refreshToken);
 
             saveUserRefreshToken(member,refreshToken);
             log.info("[AuthService:userSignInAuth] Access token for user:{}, has been generated",member.getUsername());
             return  LoginResponseDto.builder()
                     .accessToken(accessToken)
-                    .accessTokenExpiry(15 * 1)
+                    .accessTokenExpiry(15 * 3)
                     .username(member.getUsername())
                     .tokenType("Bearer")
                     .build();
         } catch(Exception e) {
-            log.error("[AuthService:userSignInAuth]Exception while authenticating the user due to :"+e.getMessage());
+            log.error("[AuthService:userSignInAuth]Exception while authenticating the user due to :" + e.getMessage());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Please Try Again");
         }
     }
 
     @Transactional(readOnly = false)
-    private void saveUserRefreshToken(Member member, String refreshToken) {
+    public void saveUserRefreshToken(Member member, String refreshToken) {
         var refreshTokenEntity = RefreshTokenEntity.builder()
                 .member(member)
                 .refreshToken(refreshToken)
@@ -120,7 +119,7 @@ public class AuthService  {
         refreshTokenRepository.save(refreshTokenEntity);
     }
 
-    private Cookie creatRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
+    public Cookie createRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie refreshTokenCookie = new Cookie("refresh_token",refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
@@ -157,7 +156,7 @@ public class AuthService  {
                 .build();
 
     }
-    private static Authentication createAuthenticationObject(Member member) {
+    public static Authentication createAuthenticationObject(Member member) {
         // Extract user details from UserDetailsEntity
         String username = member.getEmail();
         String password = member.getPassword();
@@ -172,10 +171,10 @@ public class AuthService  {
         return new UsernamePasswordAuthenticationToken(username, password, Arrays.asList(authorities));
     }
 
-    public Authentication authenicateUser(LoginDto loginDto) {
+    public Authentication authenicateUser(LoginRequestDto loginRequestDto) {
         // Created the authentication token
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
         // when this line of code executes, it will call the loadUserByUsername method in AuthService.
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);

@@ -8,10 +8,6 @@ import java.util.UUID;
 
 public interface MemberRepository extends JpaRepository<Member, UUID> {
     Member findByEmail(String email);
-    Optional<Member> findByUsernameOrEmail(String username, String email);
-    Optional<Member> findByUsername(String username);
-    Boolean existsByUsername(String username);
-    Boolean existsByEmail(String email);
     Optional<Member> findOneWithAuthoritiesByEmail(String email);
 
 }

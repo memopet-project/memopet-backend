@@ -10,7 +10,6 @@ import java.util.Optional;
 public interface RefreshTokenRepository extends JpaRepository<RefreshTokenEntity, Long> {
 
     Optional<RefreshTokenEntity> findByRefreshToken(String refreshToken);
-
     @Query(value = "SELECT rt.* FROM REFRESH_TOKENS rt " +
             "INNER JOIN USER_DETAILS ud ON rt.user_id = ud.id " +
             "WHERE ud.EMAIL = :userEmail and rt.revoked = false ", nativeQuery = true)

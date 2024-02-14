@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class LoginResponseDto {
 
-    @JsonProperty("username")
     private String username;
     @JsonProperty("user_status")
     private String userStatus;
