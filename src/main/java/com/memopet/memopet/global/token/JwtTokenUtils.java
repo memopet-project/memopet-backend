@@ -1,4 +1,4 @@
-package com.memopet.memopet.global.filter;
+package com.memopet.memopet.global.token;
 
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;

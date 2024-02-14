@@ -9,7 +9,7 @@ import com.memopet.memopet.domain.oauth2.handler.OAuth2AuthenticationSuccessHand
 import com.memopet.memopet.domain.oauth2.service.CustomOAuth2UserService;
 import com.memopet.memopet.global.filter.JwtAccessTokenFilter;
 import com.memopet.memopet.global.filter.JwtRefreshTokenFilter;
-import com.memopet.memopet.global.filter.JwtTokenUtils;
+import com.memopet.memopet.global.token.JwtTokenUtils;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
