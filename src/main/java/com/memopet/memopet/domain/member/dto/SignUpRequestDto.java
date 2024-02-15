@@ -1,6 +1,5 @@
 package com.memopet.memopet.domain.member.dto;
 
-import com.memopet.memopet.domain.member.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -10,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpDto {
+public class SignUpRequestDto {
     @NotEmpty(message = "User Name must not be empty")
     private String username;
     private String password;

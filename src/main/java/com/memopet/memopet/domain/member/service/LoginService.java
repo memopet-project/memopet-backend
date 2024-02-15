@@ -23,10 +23,6 @@ public class LoginService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final LoginFailedRepository loginFailedRepository;
-
-    //private final JavaMailSender javaMailSender;
-    private static final String USER_AUTHENTICATION_MESSAGE = "Enter the following verification code";
-
     public static final int MAX_ATTEMPT_COUNT = 5;
 
     @Override

@@ -1,8 +1,8 @@
 package com.memopet.memopet.domain.member.controller;
 
-import com.memopet.memopet.domain.member.dto.LoginDto;
+import com.memopet.memopet.domain.member.dto.LoginRequestDto;
 import com.memopet.memopet.domain.member.dto.LoginResponseDto;
-import com.memopet.memopet.domain.member.dto.SignUpDto;
+import com.memopet.memopet.domain.member.dto.SignUpRequestDto;
 import com.memopet.memopet.domain.member.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,21 +26,36 @@ public class AuthController {
 
     private final AuthService authService;
 
+    /**
+     * when a user tries to log-in, this method is triggered.
+     * @param loginRequestDto
+     * @param response
+     * @return LoginResponseDto
+     */
     @PostMapping("/sign-in")
-    public ResponseEntity<LoginResponseDto> authenticateUser(@Valid @RequestBody LoginDto loginDto, HttpServletResponse response) {
+    public ResponseEntity<LoginResponseDto> authenticateUser(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
 
-        Authentication authentication = authService.authenicateUser(loginDto);
+        // get an authentication object to generate access and refresh token
+        Authentication authentication = authService.authenicateUser(loginRequestDto);
 
+        // generate access and refresh token
         LoginResponseDto loginResponseDto = authService.getJWTTokensAfterAuthentication(authentication,response);
 
         return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpDto signUpDto, BindingResult bindingResult, HttpServletResponse httpServletResponse){
+    /**
+     * when a user tries to sign-up
+     * @param signUpRequestDto
+     * @param bindingResult
+     * @param httpServletResponse
+     * @return
+     */
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequestDto signUpRequestDto, BindingResult bindingResult, HttpServletResponse httpServletResponse){
         System.out.println("registerUser start");
 
-        log.info("[AuthController:registerUser]Signup Process Started for user:{}",signUpDto.getUsername());
+        log.info("[AuthController:registerUser]Signup Process Started for user:{}", signUpRequestDto.getUsername());
         if (bindingResult.hasErrors()) {
             List<String> errorMessage = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -49,7 +64,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
         }
 
-        return ResponseEntity.ok(authService.join(signUpDto, httpServletResponse));
+        return ResponseEntity.ok(authService.join(signUpRequestDto, httpServletResponse));
     }
 
     @PreAuthorize("hasAuthority('SCOPE_REFRESH_TOKEN')")
