@@ -14,7 +14,7 @@ public class MemberController {
     private final MemberService memberService;
 
     //@PreAuthorize("hasAnyRole('SCOPE_USER','SCOPE_ADMIN')")
-    @PreAuthorize("hasAuthority('SCOPE_READ')")
+    @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @GetMapping("/welcome-message")
     public ResponseEntity<String> UserMemberMessageTest(Authentication authentication) {
         System.out.println("UserMemberMessageTest start");
@@ -22,7 +22,7 @@ public class MemberController {
     }
 
     //@PreAuthorize("hasRole('SCOPE_ADMIN')")
-    @PreAuthorize("hasAuthority('SCOPE_WRITE')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN_AUTHORITY')")
     @GetMapping("/admin-message")
     public ResponseEntity<String> getAdminData(){
         return ResponseEntity.ok("admin");

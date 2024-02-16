@@ -124,7 +124,7 @@ public class PetTest {
                 .petProfileUrl("https://images.unsplash.com/photo-1528301721190-186c3bd85418?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8fA%3D%3D")
                 .petFavs("밥먹기")
                 .petDesc("우리 방울이는 밥먹기를 너무 좋아하는 친구입니다.")
-                .gender(Gender.F)
+                .gender(Gender.M)
                 .build();
 
         Pet findPet = petRepository.save(pet);

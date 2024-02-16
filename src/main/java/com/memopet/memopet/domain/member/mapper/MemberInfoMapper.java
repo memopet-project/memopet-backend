@@ -1,6 +1,6 @@
 package com.memopet.memopet.domain.member.mapper;
 
-import com.memopet.memopet.domain.member.dto.SignUpDto;
+import com.memopet.memopet.domain.member.dto.SignUpRequestDto;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.entity.MemberStatus;
 import lombok.RequiredArgsConstructor;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberInfoMapper {
     private final PasswordEncoder passwordEncoder;
-    public Member convertToEntity(SignUpDto signUpDto) {
+    public Member convertToEntity(SignUpRequestDto signUpRequestDto) {
         Member member = Member.builder()
-                    .username(signUpDto.getUsername())
-                    .password(passwordEncoder.encode(signUpDto.getPassword()))
-                    .email(signUpDto.getEmail())
-                    .phoneNum(signUpDto.getPhoneNum())
+                    .username(signUpRequestDto.getUsername())
+                    .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
+                    .email(signUpRequestDto.getEmail())
+                    .phoneNum(signUpRequestDto.getPhoneNum())
                     .memberStatus(MemberStatus.NORMAL)
                     .loginFailCount(0)
                     .roles("ROLE_USER")

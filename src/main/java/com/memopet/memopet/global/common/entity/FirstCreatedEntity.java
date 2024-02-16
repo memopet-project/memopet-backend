@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Getter
 public class FirstCreatedEntity extends LastModifiedEntity { // DataJpaApplication파일에 @EnableJpaAuditing넣고 쓸수있다.
 
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;

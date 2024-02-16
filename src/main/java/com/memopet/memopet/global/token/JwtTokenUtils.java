@@ -1,4 +1,4 @@
-package com.memopet.memopet.global.filter;
+package com.memopet.memopet.global.token;
 
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
@@ -19,6 +19,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class JwtTokenUtils {
 
+    private final MemberRepository memberRepository ;
     public String getUserName(Jwt jwtToken){
         return jwtToken.getSubject();
     }
@@ -35,7 +36,6 @@ public class JwtTokenUtils {
         return Objects.requireNonNull(jwtToken.getExpiresAt()).isBefore(Instant.now());
     }
 
-    private final MemberRepository memberRepository ;
     public UserDetails userDetails(String email){
         return memberRepository
                 .findOneWithAuthoritiesByEmail(email)

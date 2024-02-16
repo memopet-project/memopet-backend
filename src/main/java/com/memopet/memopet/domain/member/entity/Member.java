@@ -27,9 +27,9 @@ public class Member extends FirstCreatedEntity implements Serializable {
     private String username;
     @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "encrypt_password", nullable = false)
+    @Column(name = "encrypt_password")
     private String password;
-    @Column(name = "phone_num", nullable = false)
+    @Column(name = "phone_num")
     private String phoneNum;
 
     @Column(name = "deactivation_reason_comment")
@@ -59,6 +59,12 @@ public class Member extends FirstCreatedEntity implements Serializable {
 
     @OneToMany(mappedBy = "member")
     private List<Pet> pets = new ArrayList<>();
+
+    @Column(name="provider")
+    private String provider; //어떤 OAuth인지(google, naver 등)
+
+    @Column(name="providerid")
+    private String provideId; // 해당 OAuth 의 key(id)
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RefreshTokenEntity> refreshTokens;

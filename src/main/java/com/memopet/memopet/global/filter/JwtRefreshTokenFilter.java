@@ -2,6 +2,7 @@ package com.memopet.memopet.global.filter;
 
 import com.memopet.memopet.domain.member.repository.RefreshTokenRepository;
 import com.memopet.memopet.global.config.RSAKeyRecord;
+import com.memopet.memopet.global.token.JwtTokenUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
