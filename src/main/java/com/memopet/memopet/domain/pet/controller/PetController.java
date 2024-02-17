@@ -37,7 +37,7 @@ public class PetController {
         System.out.println(petRequestDto.getPetFavs());
         System.out.println(petRequestDto.getPetFavs2());
         System.out.println(petRequestDto.getPetFavs3());
-        System.out.println("------------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
         boolean isSaved = petService.savePet(backImgUrl, petProfileUrl, petRequestDto);
         System.out.println("pet saved complete1");
         PetResponseDto petResponse = PetResponseDto.builder().decCode(isSaved ? '1': '0').build();
