@@ -2,8 +2,7 @@ package com.memopet.memopet.domain.pet.service;
 
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
-import com.memopet.memopet.domain.pet.dto.PetRequestDto;
-import com.memopet.memopet.domain.pet.dto.PetResponseDto;
+import com.memopet.memopet.domain.pet.dto.*;
 import com.memopet.memopet.domain.pet.entity.Pet;
 import com.memopet.memopet.domain.pet.entity.PetStatus;
 import com.memopet.memopet.domain.pet.entity.Species;
@@ -11,6 +10,7 @@ import com.memopet.memopet.domain.pet.repository.PetRepository;
 import com.memopet.memopet.domain.pet.repository.SpeciesRepository;
 import com.memopet.memopet.global.common.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,5 +73,17 @@ public class PetService {
         Pet savedPet = petRepository.save(pet);
         System.out.println("pet saved complete");
         return isSaved;
+    }
+
+    @Transactional(readOnly = true)
+    public PetListWrapper profileList(Pageable pageable, PetListRequestDTO petListRequestDTO) {
+        PetListWrapper wrapper = new PetListWrapper();
+        if (petListRequestDTO == null || petListRequestDTO.getEmail() == null || petListRequestDTO.getEmail().isEmpty()) {
+            // Set error code and description for missing or invalid email
+            wrapper.setErrorCode("0");
+            wrapper.setErrorDescription("Email is missing or invalid");
+        } else {
+        wrapper.setPetList(petRepository.findPetsByEmail(pageable,petListRequestDTO.getEmail()));}
+        return wrapper;
     }
 }

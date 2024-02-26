@@ -273,8 +273,8 @@ public class MemoryTest {
         //////////BLOCKED//TEST/////////////////////
 
         Blocked blocked = Blocked.builder()
-                .blockedPet(pet2.getId())
-                .blockerPet(pett)
+                .blockedPet(pet2)
+                .blockerPetId(pett.getId())
                 .build();
         Blocked blocked1 = blockedRepository.save(blocked);
 

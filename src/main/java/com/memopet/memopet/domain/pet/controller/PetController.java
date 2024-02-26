@@ -1,12 +1,13 @@
 package com.memopet.memopet.domain.pet.controller;
 
 
-import com.memopet.memopet.domain.pet.dto.PetRequestDto;
-import com.memopet.memopet.domain.pet.dto.PetResponseDto;
+import com.memopet.memopet.domain.pet.dto.*;
 import com.memopet.memopet.domain.pet.service.PetService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -43,4 +44,15 @@ public class PetController {
         PetResponseDto petResponse = PetResponseDto.builder().decCode(isSaved ? '1': '0').build();
         return petResponse;
     }
+
+
+    @GetMapping("")
+    public PetListWrapper petsList(@PageableDefault(size = 5,page = 0) Pageable pageable, @RequestBody PetListRequestDTO petListRequestDTO) {
+        return petService.profileList(pageable, petListRequestDTO);
+    }
+
+//    @PatchMapping("")
+//    public PetResponseDto switchProfile(@RequestBody SwitchProfileDTO) {
+//        return petService.
+//    }
 }
