@@ -1,5 +1,6 @@
 package com.memopet.memopet.domain.pet.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,7 @@ public class Memory extends FirstCreatedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
-    private Pet petId;
+    private Pet pet;
 
     @Column(name = "memory_title",nullable = false)
     private String title;
@@ -27,13 +28,20 @@ public class Memory extends FirstCreatedEntity {
     private LocalDateTime memoryDate;
 
     @Column(name = "memory_desc")
-    private String description;
+    private String memoryDescription;
 
     @Column(name = "like_count")
-    private Long likeCount;
+    private int likeCount;
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
+
+    @Column(name = "memory_image_url_1")
+    private String memoryImageUrl1;
+    @Column(name = "memory_image_url_2")
+    private String memoryImageUrl2;
+    @Column(name = "memory_image_url_3")
+    private String memoryImageUrl3;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -130,10 +130,9 @@ public class PetTest {
         Pet findPet = petRepository.save(pet);
         // 빈 추억 객체 생성
         Memory memory = Memory.builder()
-                .petId(pet)
+                .pet(pet)
                 .title("meepy life")
                 .memoryDate(LocalDateTime.now())
-                .description("MEEP!")
                 .audience(Audience.ALL)
                 .build();
         memoryRepository.save(memory);

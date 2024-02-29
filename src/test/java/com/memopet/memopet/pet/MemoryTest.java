@@ -164,10 +164,9 @@ public class MemoryTest {
         //MEMORY TEST////////////
 
         Memory memory = Memory.builder()
-                .petId(pet)
+                .pet(pet)
                 .title("meepy life")
                 .memoryDate(LocalDateTime.now())
-                .description("MEEP!")
                 .audience(Audience.ALL)
                 .build();
         memoryRepository.save(memory);
@@ -224,10 +223,9 @@ public class MemoryTest {
                 .petProfileUrl("dfdf").build();
         Pet pett = petRepository.save(pet);
         Memory memory = Memory.builder()
-                .petId(pet)
+                .pet(pet)
                 .title("meepy life")
                 .memoryDate(LocalDateTime.now())
-                .description("MEEP!")
                 .audience(Audience.ALL)
                 .build();
         Memory memory1=memoryRepository.save(memory);
@@ -264,7 +262,7 @@ public class MemoryTest {
         ///LIKES TEST//////////////////////
 
         Likes likes = Likes.builder()
-                .memoryID(memory1)
+                .memoryId(memory1)
                 .petId(pett)
                 .likedOwnPetId(pet2.getId())
                 .build();
