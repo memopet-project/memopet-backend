@@ -89,5 +89,7 @@ jobs:
         # 도커 작업
         script: |
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/memopet-dev:latest
-          docker stop server
-          docker run -d --rm --name server -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/memopet-dev:latest
+          docker stop $(docker ps -a -q)
+          docker run -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/memopet-dev:latest
+          docker rm $(docker ps --filter 'status=exited' -a -q)
+          docker image prune -a -f
