@@ -66,4 +66,8 @@ public class Pet extends FirstCreatedEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
+    /********** 변경감지용 메서드 **************/
+    public void changeDeletedDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
+    }
 }

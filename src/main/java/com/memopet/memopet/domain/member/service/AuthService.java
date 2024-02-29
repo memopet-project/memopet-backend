@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.security.auth.login.AccountLockedException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -32,11 +33,15 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class AuthService  {
 
+
+    private static final int ACCESSTOKENEXPIRYTIME = 3 * 60;
+    private static final int REFRESHTOKENEXPIRYTIME = 15 * 24 * 60 * 60;
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenGenerator jwtTokenGenerator;
     private final MemberInfoMapper memberInfoMapper;
+    private final LoginService loginService;
 
     /**
      * return the user id if the sign up process is successfully completed
@@ -69,10 +74,12 @@ public class AuthService  {
 
             log.info("[AuthService:registerUser] User:{} Successfully registered",member1.getUsername());
             return  LoginResponseDto.builder()
+                    .username(savedmember.getUsername())
+                    .userStatus(savedmember.getMemberStatus())
+                    .userRole(savedmember.getRoles() == "ROLE_USER" ? "GU" : "SA")
+                    .loginFailCount(savedmember.getLoginFailCount())
                     .accessToken(accessToken)
-                    .accessTokenExpiry(5 * 60)
-                    .username(member1.getUsername())
-                    .tokenType("Bearer")
+                    .accessTokenExpiry(ACCESSTOKENEXPIRYTIME)
                     .build();
 
 
@@ -85,7 +92,7 @@ public class AuthService  {
     @Transactional(readOnly = false)
     public LoginResponseDto getJWTTokensAfterAuthentication(Authentication authentication, HttpServletResponse response) {
         try {
-            var member = memberRepository.findOneWithAuthoritiesByEmail(authentication.getName())
+            var savedmember = memberRepository.findOneWithAuthoritiesByEmail(authentication.getName())
                     .orElseThrow(()->{
                         log.error("[AuthService:userSignInAuth] User :{} not found", authentication.getName());
                         return new ResponseStatusException(HttpStatus.NOT_FOUND,"USER NOT FOUND ");});
@@ -95,13 +102,15 @@ public class AuthService  {
 
             createRefreshTokenCookie(response,refreshToken);
 
-            saveUserRefreshToken(member,refreshToken);
-            log.info("[AuthService:userSignInAuth] Access token for user:{}, has been generated",member.getUsername());
+            saveUserRefreshToken(savedmember,refreshToken);
+            log.info("[AuthService:userSignInAuth] Access token for user:{}, has been generated",savedmember.getUsername());
             return  LoginResponseDto.builder()
+                    .username(savedmember.getUsername())
+                    .userStatus(savedmember.getMemberStatus())
+                    .userRole(savedmember.getRoles() == "ROLE_USER" ? "GU" : "SA")
+                    .loginFailCount(savedmember.getLoginFailCount())
                     .accessToken(accessToken)
-                    .accessTokenExpiry(15 * 3)
-                    .username(member.getUsername())
-                    .tokenType("Bearer")
+                    .accessTokenExpiry(ACCESSTOKENEXPIRYTIME)
                     .build();
         } catch(Exception e) {
             log.error("[AuthService:userSignInAuth]Exception while authenticating the user due to :" + e.getMessage());
@@ -123,7 +132,7 @@ public class AuthService  {
         Cookie refreshTokenCookie = new Cookie("refresh_token",refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setSecure(true);
-        refreshTokenCookie.setMaxAge(15 * 24 * 60 * 60 ); // in seconds
+        refreshTokenCookie.setMaxAge(REFRESHTOKENEXPIRYTIME); // in seconds
         response.addCookie(refreshTokenCookie);
         return refreshTokenCookie;
     }
@@ -140,19 +149,21 @@ public class AuthService  {
                 .filter(tokens-> !tokens.isRevoked())
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Refresh token revoked"));
 
-        Member member = refreshTokenEntity.getMember();
+        Member savedmember = refreshTokenEntity.getMember();
 
         //Now create the Authentication object
-        Authentication authentication =  createAuthenticationObject(member);
+        Authentication authentication =  createAuthenticationObject(savedmember);
 
         //Use the authentication object to generate new accessToken as the Authentication object that we will have may not contain correct role.
         String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
 
         return  LoginResponseDto.builder()
+                .username(savedmember.getUsername())
+                .userStatus(savedmember.getMemberStatus())
+                .userRole(savedmember.getRoles() == "ROLE_USER" ? "GU" : "SA")
+                .loginFailCount(savedmember.getLoginFailCount())
                 .accessToken(accessToken)
-                .accessTokenExpiry(5 * 60)
-                .username(member.getUsername())
-                .tokenType("Bearer")
+                .accessTokenExpiry(ACCESSTOKENEXPIRYTIME)
                 .build();
 
     }
@@ -176,6 +187,8 @@ public class AuthService  {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
 
+
+        loginService.loginAttemptCheck(loginRequestDto.getEmail(), loginRequestDto.getPassword());
         // when this line of code executes, it will call the loadUserByUsername method in AuthService.
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 

@@ -1,5 +1,6 @@
-package com.memopet.memopet.global.common.dto;
+package com.memopet.memopet.domain.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -9,9 +10,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmailAuthRequestDto {
+public class MemberProfileRequestDto {
+
     @Email
     @NotBlank
     private String email;
-    public String code;
+
 }
