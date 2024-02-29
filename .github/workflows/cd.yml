@@ -85,6 +85,7 @@ jobs:
         host: ${{ secrets.HOST_PROD }} # EC2 인스턴스 퍼블릭 DNS
         username: ec2-user
         key: ${{ secrets.PRIVATE_KEY }} # pem 키
+        port: ${{ secrets.SSH_PORT }}
         # 도커 작업
         script: |
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/memopet-dev:latest
