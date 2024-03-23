@@ -1,13 +1,15 @@
 package com.memopet.memopet.domain.pet.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
-public class FollowDTO {
+@Getter
+@NoArgsConstructor
+public class FollowRequestDto {
     private Long petId;
     private Long followingPetId;
 
-    public FollowDTO(Long petId, Long followingPetId) {
+    public FollowRequestDto(Long petId, Long followingPetId) {
         this.petId = petId;
         this.followingPetId = followingPetId;
     }

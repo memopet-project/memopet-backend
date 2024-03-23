@@ -1,34 +1,24 @@
 package com.memopet.memopet.pet;
 
-import com.memopet.memopet.domain.member.entity.Member;
-import com.memopet.memopet.domain.member.entity.QMember;
-import com.memopet.memopet.domain.member.entity.RefreshTokenEntity;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
-import com.memopet.memopet.domain.pet.dto.PetListRequestDTO;
-import com.memopet.memopet.domain.pet.dto.PetListResponseDTO;
+import com.memopet.memopet.domain.pet.controller.PetController;
+import com.memopet.memopet.domain.pet.dto.PetListResponseDto;
 import com.memopet.memopet.domain.pet.dto.PetListWrapper;
-import com.memopet.memopet.domain.pet.entity.*;
 import com.memopet.memopet.domain.pet.repository.PetRepository;
 import com.memopet.memopet.domain.pet.repository.SpeciesRepository;
 import com.memopet.memopet.domain.pet.service.PetService;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 public class PetTest2 {
     @Autowired
     PetRepository petRepository;
@@ -38,6 +28,8 @@ public class PetTest2 {
     MemberRepository memberRepository;
     @Autowired
     SpeciesRepository speciesRepository;
+    @Autowired
+    PetController petController;
 
     @Autowired
     PetService petService;
@@ -45,52 +37,43 @@ public class PetTest2 {
 
 
 
+
     @Test
     public void MyProfileList() throws Exception {
-        //given
-        String email = "jae@gmail.com";
-        memberRepository.findByEmail(email);
+//        CustomPetReposiotryImpl-성공
         Pageable pageable = PageRequest.of(0, 5);
-        //when
-//        Page<PetListResponseDTO> result= memberRepository.findPetsByEmail(pageable,email);
-//
-//        for (PetListResponseDTO petListResponseDTO : result) {
-//            System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
-//            System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
-//            System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
-//        }
-        PetListRequestDTO email1 = new PetListRequestDTO(email);
-        PetListWrapper result= petService.profileList(pageable, email1);
-        System.out.println("result = " + result);
-        for (PetListResponseDTO petListResponseDTO : result.getPetList()) {
+        Long petId=3L;
+        Page<PetListResponseDto> result=petRepository.findPetsById(pageable,petId);
+
+        for (PetListResponseDto petListResponseDTO : result) {
+            System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
+            System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
+            System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
+        }
+        Assertions.assertThat(result.getTotalElements()).isEqualTo(5);
+//            petService에서 확인하기
+        PetListWrapper result2= petService.profileList(pageable,petId);
+        System.out.println("result = " + result2);
+        for (PetListResponseDto petListResponseDTO : result2.getPetList()) {
             System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
             System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
             System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
         }
-        
-
-
-        //then
-
+        Assertions.assertThat(result2.getPetList().getTotalElements()).isEqualTo(5);
     }
     
     @Test
     public void switchProfile() throws Exception {
-        //given
-        Long petId = 1L;
-        List<Pet> list = petRepository.findMyPets(petId);
-        //when
-        
-        //then
-        for (Pet pet : list) {
-            System.out.println("pet.getPetName() = " + pet.getPetName());
-            System.out.println("pet.getPetProfileUrl() = " + pet.getPetProfileUrl());
-            System.out.println("pet.getId() = " + pet.getId());
-        }
 
+        Long petId = 6L;
+        Assertions.assertThat(petRepository.switchPetProfile(petId)).isTrue();
+        //이미 활성화된 계정이거나 아예 존재하지 않는 펫아이디일떄.
+        Long petId2 = 8L;
+        Assertions.assertThat(petRepository.switchPetProfile(petId2)).isFalse();
 
-    
     }
+
+
 //    @PostConstruct
 //    public class init{
 //

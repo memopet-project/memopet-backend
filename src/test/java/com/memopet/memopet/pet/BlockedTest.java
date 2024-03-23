@@ -3,9 +3,9 @@ package com.memopet.memopet.pet;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.entity.RefreshTokenEntity;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
-import com.memopet.memopet.domain.pet.controller.BlockedController;
-import com.memopet.memopet.domain.pet.dto.BlockDTO;
-import com.memopet.memopet.domain.pet.dto.BlockedListDTO;
+import com.memopet.memopet.domain.pet.dto.BlockRequestDto;
+import com.memopet.memopet.domain.pet.dto.BlockListWrapper;
+import com.memopet.memopet.domain.pet.dto.BlockedListResponseDto;
 import com.memopet.memopet.domain.pet.entity.*;
 import com.memopet.memopet.domain.pet.repository.BlockedRepository;
 import com.memopet.memopet.domain.pet.repository.PetRepository;
@@ -21,16 +21,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 public class BlockedTest {
     @Autowired
     MemberRepository memberRepository;
@@ -169,15 +166,15 @@ public class BlockedTest {
         Pageable pageable = PageRequest.of(0, 20);
 
 //        //then
-        Page<BlockedListDTO> block = blockedService.blockedPetList(pageable,blockerPet.getId());
-        System.out.println("block.getTotalPages() = " + block.getTotalPages());
-        System.out.println("block.getTotalElements() = " + block.getTotalElements());
-        Assertions.assertThat(block.getTotalPages()).isEqualTo(1);
-        Assertions.assertThat(block.getTotalElements()).isEqualTo(2);
-        System.out.println("block.getContent().get(0).getPetName() = " + block.getContent().get(0).getPetName());
-        System.out.println("block.getContent().get(1).getPetName() = " + block.getContent().get(1).getPetName());
+        BlockListWrapper block = blockedService.blockedPetList(pageable,blockerPet.getId());
+        System.out.println("block.getTotalPages() = " + block.getPetList().getTotalPages());
+        System.out.println("block.getTotalElements() = " + block.getPetList().getTotalElements());
+        Assertions.assertThat(block.getPetList().getTotalPages()).isEqualTo(1);
+        Assertions.assertThat(block.getPetList().getTotalElements()).isEqualTo(2);
+        System.out.println("block.getContent().get(0).getPetName() = " + block.getPetList().getContent().get(0).getPetName());
+        System.out.println("block.getContent().get(1).getPetName() = " + block.getPetList().getContent().get(1).getPetName());
 
-       
+
 
     }
     @Test
@@ -187,74 +184,79 @@ public class BlockedTest {
         Pet blockedPet2 = petRepository.getReferenceById(3L);
 
         //생성 - 같은 펫이 같은 펫 차단하면 예외처리되는거 확인.
-        BlockDTO blockDTO = new BlockDTO(2L, 1L);
-        blockedService.blockApet(blockDTO);
-        BlockDTO blockDTO2 = new BlockDTO(2L, 3L);
+        BlockRequestDto blockRequestDTO = new BlockRequestDto(2L, 1L);
+        blockedService.blockApet(blockRequestDTO);
+        BlockRequestDto blockDTO2 = new BlockRequestDto(2L, 3L);
         blockedService.blockApet(blockDTO2);
         //삭제 - 삭제되는거 확인+ 이미 삭제한 펫 다시 차단 못하는것도 확인.
-        BlockDTO unblockDTO = new BlockDTO(2L, 3L);
-        blockedService.unblockAPet(unblockDTO);
+        blockedService.unblockAPet(2L,3L);
         //내가 블럭한 사람들 리스트
         blockedService.blockApet(blockDTO2);
-        BlockDTO blockDTO4 = new BlockDTO(2L, 4L);
-        BlockDTO blockDTO5 = new BlockDTO(2L, 5L);
-        BlockDTO blockDTO6 = new BlockDTO(2L, 6L);
+        BlockRequestDto blockDTO4 = new BlockRequestDto(2L, 4L);
+        BlockRequestDto blockDTO5 = new BlockRequestDto(2L, 5L);
+        BlockRequestDto blockDTO6 = new BlockRequestDto(2L, 6L);
         blockedService.blockApet(blockDTO4);
         blockedService.blockApet(blockDTO5);
         blockedService.blockApet(blockDTO6);
 
         Pageable pageable = PageRequest.of(0, 3);
-        Page<BlockedListDTO> lists=blockedService.blockedPetList(pageable, 2L);
-        for (BlockedListDTO list : lists) {
+        BlockListWrapper lists=blockedService.blockedPetList(pageable, 2L);
+        for (BlockedListResponseDto list : lists.getPetList()) {
             System.out.println("list.getPetId() = " + list.getPetId());
             System.out.println("list.getPetName() = " + list.getPetName());
             System.out.println("list.getPetDesc() = " + list.getPetDesc());
             System.out.println("list.getPetProfileUrl() = " + list.getPetProfileUrl());
         }
-        Assertions.assertThat(lists.getTotalElements()).isEqualTo(5);
-        Assertions.assertThat(lists.getTotalPages()).isEqualTo(2);
+        Assertions.assertThat(lists.getPetList().getTotalElements()).isEqualTo(5);
+        Assertions.assertThat(lists.getPetList().getTotalPages()).isEqualTo(2);
 
         Pageable pageable1 = PageRequest.of(0, 2);
-        Page<BlockedListDTO> lists1=blockedService.blockedPetList(pageable1, 2L);
-        for (BlockedListDTO list : lists1) {
+        BlockListWrapper lists1=blockedService.blockedPetList(pageable1, 2L);
+        for (BlockedListResponseDto list : lists1.getPetList()) {
             System.out.println("list.getPetId() = " + list.getPetId());
             System.out.println("list.getPetName() = " + list.getPetName());
             System.out.println("list.getPetDesc() = " + list.getPetDesc());
             System.out.println("list.getPetProfileUrl() = " + list.getPetProfileUrl());
         }
 
-        Assertions.assertThat(lists1.getTotalElements()).isEqualTo(5);
-        Assertions.assertThat(lists1.getTotalPages()).isEqualTo(3);
+        Assertions.assertThat(lists1.getPetList().getTotalElements()).isEqualTo(5);
+        Assertions.assertThat(lists1.getPetList().getTotalPages()).isEqualTo(3);
 
 
 //        }
 
     }
 
-    @Autowired BlockedController blockedController;
+
     @Test
     public void listblockTest() throws Exception {
 
-        BlockDTO blockDTO2 = new BlockDTO(1L, 2L);
-        BlockDTO blockDTO3 = new BlockDTO(1L, 3L);
-        BlockDTO blockDTO4 = new BlockDTO(1L, 4L);
-        BlockDTO blockDTO5 = new BlockDTO(1L, 5L);
-        BlockDTO blockDTO6 = new BlockDTO(1L, 6L);
+        BlockRequestDto blockDTO2 = new BlockRequestDto(1L, 2L);
+        BlockRequestDto blockDTO3 = new BlockRequestDto(1L, 3L);
+        BlockRequestDto blockDTO4 = new BlockRequestDto(1L, 4L);
+        BlockRequestDto blockDTO5 = new BlockRequestDto(1L, 5L);
+        BlockRequestDto blockDTO6 = new BlockRequestDto(1L, 6L);
         blockedService.blockApet(blockDTO2);
         blockedService.blockApet(blockDTO3);
         blockedService.blockApet(blockDTO4);
         blockedService.blockApet(blockDTO5);
         blockedService.blockApet(blockDTO6);
-        //given
-        Page<BlockedListDTO> listDTOS=blockedController.blockedPetList(null,1L);
-        //when
-        for (BlockedListDTO listDTO : listDTOS) {
-            System.out.println("listDTO.getPetId() = " + listDTO.getPetId());
-            System.out.println("listDTO.getPetName() = " + listDTO.getPetName());
+
+
+        Page<BlockedListResponseDto> blockList = blockedRepository.findBlockedPets(1L, Pageable.ofSize(20));
+        for (BlockedListResponseDto block: blockList) {
+            System.out.println("block.getBlockedPet().getId() = " + block.getPetId());
+            System.out.println("block.getBlockedPet().getPetName() = " + block.getPetName());
         }
-        
-        //then
-    
+        Assertions.assertThat(blockList.getTotalElements()).isEqualTo(5);
+        //given
+//        BlockListWrapper listDTOS=blockedController.blockedPetList(null,1L);
+//        //when
+//        for (BlockedListResponseDTO listDTO : listDTOS.getPetList()) {
+//            System.out.println("listDTO.getPetId() = " + listDTO.getPetId());
+//            System.out.println("listDTO.getPetName() = " + listDTO.getPetName());
+//        }
+
     }
 }
 

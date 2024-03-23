@@ -1,14 +1,12 @@
 package com.memopet.memopet.domain.pet.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
-@Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class PetResponseDto {
+public class MemoryPostResponseDto {
     @JsonProperty("dec_code")
     private char decCode;
 }

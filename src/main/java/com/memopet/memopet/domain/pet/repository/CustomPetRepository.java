@@ -1,15 +1,15 @@
 package com.memopet.memopet.domain.pet.repository;
 
-import com.memopet.memopet.domain.pet.dto.PetListResponseDTO;
-import com.memopet.memopet.domain.pet.entity.Pet;
-import com.memopet.memopet.domain.pet.entity.QPet;
+import com.memopet.memopet.domain.pet.dto.PetListResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
+import java.util.UUID;
 
 public interface CustomPetRepository {
-    Page<PetListResponseDTO> findPetsByEmail(Pageable pageable, String email);
+    Page<PetListResponseDto> findPetsById(Pageable pageable, Long id);
 
-    public List<Pet> findMyPets(Long PetId);
+    boolean switchPetProfile(Long petId);
+
+    boolean deleteAPet(UUID memberId, Long petId);
 }

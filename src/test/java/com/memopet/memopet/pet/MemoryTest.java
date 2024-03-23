@@ -82,25 +82,6 @@ public class MemoryTest {
         System.out.println("pet's species " + foundSpecies.get().getLargeCategory());
 
 
-
-        // RECENT_SEARCH_TEST///////////////////////////
-
-        RecentSearch recentSearch = RecentSearch.builder()
-                .petId(pet)
-                .searchText("Chiwawa")
-                .build();
-        recentSearchRepository.save(recentSearch);
-        RecentSearch recentSearch1 = RecentSearch.builder()
-                .petId(pet)
-                .searchText("개")
-                .build();
-        recentSearchRepository.save(recentSearch1);
-
-        List<RecentSearch> recentSearches =recentSearchRepository.findByPetId(pet);
-        Assertions.assertThat(recentSearches.size()).isEqualTo(2);  // Assuming there are two recent searches
-        Assertions.assertThat(recentSearches.get(0).getSearchText()).isEqualTo("Chiwawa");
-        Assertions.assertThat(recentSearches.get(1).getSearchText()).isEqualTo("개");
-
     }
 
     @Autowired

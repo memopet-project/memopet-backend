@@ -3,7 +3,7 @@ package com.memopet.memopet.pet;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.entity.RefreshTokenEntity;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
-import com.memopet.memopet.domain.pet.dto.FollowDTO;
+import com.memopet.memopet.domain.pet.dto.FollowRequestDto;
 import com.memopet.memopet.domain.pet.entity.Gender;
 import com.memopet.memopet.domain.pet.entity.Pet;
 import com.memopet.memopet.domain.pet.entity.PetStatus;
@@ -12,7 +12,6 @@ import com.memopet.memopet.domain.pet.repository.FollowRepository;
 import com.memopet.memopet.domain.pet.repository.PetRepository;
 import com.memopet.memopet.domain.pet.repository.SpeciesRepository;
 import com.memopet.memopet.domain.pet.service.FollowService;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.annotation.PostConstruct;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,8 +22,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -48,57 +45,63 @@ public class FollowTest {
     @Test
     public void FollowAPet() throws Exception {
         //given
-        FollowDTO followDTO = new FollowDTO(1L, 2L);
-        int result= followService.followAPet(followDTO).getResultCode();
-        System.out.println("result = " + result);
-        FollowDTO followDTO1 = new FollowDTO(1L, 3L);
-        int result2= followService.followAPet(followDTO1).getResultCode();
-        System.out.println("result2 = " + result2);
+        FollowRequestDto followRequestDTO = new FollowRequestDto(1L, 2L);
+        char result = followService.followAPet(followRequestDTO).getDecCode();
+        Assertions.assertThat(result).isEqualTo('1');
+        FollowRequestDto followRequestDto1 = new FollowRequestDto(1L, 3L);
+        char result2 = followService.followAPet(followRequestDto1).getDecCode();
+        Assertions.assertThat(result2).isEqualTo('1');
+
+        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
+        char result3 = followService.followAPet(followRequestDto1).getDecCode();
+        Assertions.assertThat(result3).isEqualTo('0');
+
+
     }
 
     @Test
     public void followersAndFollowings() throws Exception {
 
-        FollowDTO followDTO4 = new FollowDTO(2L, 3L);
-        followService.followAPet(followDTO4);
-
-        FollowDTO followDTO2 = new FollowDTO(1L, 3L);
-        followService.followAPet(followDTO2);
-
+        FollowRequestDto followRequestDto4 = new FollowRequestDto(2L, 3L);
+        followService.followAPet(followRequestDto4);
         boolean result=followRepository.existsByPetIdAndFollowingPetId(2L, 3L);
-        System.out.println("result = " + result);
+        Assertions.assertThat(result).isTrue();
+
+
+        boolean result2=followRepository.existsByPetIdAndFollowingPetId(3L, 3L);
+        Assertions.assertThat(result2).isFalse();
 
 
     }
     @Test
     public void unfollow() throws Exception {
         //given
-        FollowDTO followDTO4 = new FollowDTO(2L, 3L);
-        followService.followAPet(followDTO4);
+        FollowRequestDto followRequestDto4 = new FollowRequestDto(2L, 3L);
+        followService.followAPet(followRequestDto4);
 
-        FollowDTO followDTO2 = new FollowDTO(1L, 3L);
-        followService.followAPet(followDTO2);
+        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
+        followService.followAPet(followRequestDto2);
 
 //        when
         boolean result = followRepository.existsByPetIdAndFollowingPetId(1L, 3L); //질저장되었는지 확인
         Assertions.assertThat(result).isTrue();
 
         //then
-        followRepository.deleteByPetIdAndFollowingPetId(followDTO2.getPetId(),followDTO2.getFollowingPetId()); //언팔로우
+        followRepository.deleteByPetIdAndFollowingPetId(followRequestDto2.getPetId(), followRequestDto2.getFollowingPetId()); //언팔로우
         boolean result1 = followRepository.existsByPetIdAndFollowingPetId(1L, 3L); //디비에 없는지 확인
         Assertions.assertThat(result1).isFalse();
     }
     @Test
     public void unfollowFromService() throws Exception {
         //given
-        FollowDTO followDTO4 = new FollowDTO(2L, 3L);
-        followService.followAPet(followDTO4);
+        FollowRequestDto followRequestDto4 = new FollowRequestDto(2L, 3L);
+        followService.followAPet(followRequestDto4);
 
-        FollowDTO followDTO2 = new FollowDTO(1L, 3L);
-        followService.followAPet(followDTO2);
+        FollowRequestDto followRequestDto2 = new FollowRequestDto(1L, 3L);
+        followService.followAPet(followRequestDto2);
 
         //then
-        followService.unfollow(followDTO2);
+        followService.unfollow(1L,3L);
         boolean result1 = followRepository.existsByPetIdAndFollowingPetId(1L, 3L); //디비에 없는지 확인
         Assertions.assertThat(result1).isFalse();
     }

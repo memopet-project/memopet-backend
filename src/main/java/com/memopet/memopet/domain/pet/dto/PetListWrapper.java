@@ -1,21 +1,16 @@
 package com.memopet.memopet.domain.pet.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.domain.Page;
 
-@Data
+@Getter
+@Builder
 public class PetListWrapper {
-    private Page<PetListResponseDTO> petList;
-    private String errorCode;
-    private String errorDescription;
+    private Page<PetListResponseDto> petList;
+    @JsonProperty("dec_code")
+    private char decCode;
+    private String message;
 
-    public PetListWrapper(Page<PetListResponseDTO> petList, String errorCode, String errorDescription) {
-        this.petList = petList;
-        this.errorCode = errorCode;
-        this.errorDescription = errorDescription;
-    }
-
-    public PetListWrapper() {
-
-    }
 }

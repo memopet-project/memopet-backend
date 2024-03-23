@@ -11,6 +11,7 @@ import com.memopet.memopet.domain.pet.repository.SpeciesRepository;
 import com.memopet.memopet.global.common.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +28,7 @@ public class PetService {
     private final SpeciesRepository speciesRepository;
     private final MemberRepository memberRepository;
     private final S3Uploader s3Uploader;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Transactional(readOnly = false)
@@ -75,15 +77,39 @@ public class PetService {
         return isSaved;
     }
 
+    /**
+     * 내 프로필 리스트
+     */
     @Transactional(readOnly = true)
-    public PetListWrapper profileList(Pageable pageable, PetListRequestDTO petListRequestDTO) {
-        PetListWrapper wrapper = new PetListWrapper();
-        if (petListRequestDTO == null || petListRequestDTO.getEmail() == null || petListRequestDTO.getEmail().isEmpty()) {
+    public PetListWrapper profileList(Pageable pageable, Long petId) {
+
+        if (petId == null) {
             // Set error code and description for missing or invalid email
-            wrapper.setErrorCode("0");
-            wrapper.setErrorDescription("Email is missing or invalid");
+           return PetListWrapper.builder().decCode('0').build();
+
         } else {
-        wrapper.setPetList(petRepository.findPetsByEmail(pageable,petListRequestDTO.getEmail()));}
-        return wrapper;
+            return PetListWrapper.builder().petList(petRepository.findPetsById(pageable,petId)).build();}
+
+    }
+
+    /**
+     * 펫 프로필 전환
+     */
+    @Transactional(readOnly = false)
+    public boolean switchProfile(PetSwitchRequestDto petSwitchRequestDTO) {
+
+        return petRepository.switchPetProfile(petSwitchRequestDTO.getPetId());
+    }
+
+    @Transactional(readOnly = false)
+    public boolean deletePetProfile(PetDeleteRequestDto petDeleteRequestDTO) {
+
+        Member member = memberRepository.findByEmailAndDeletedDateIsNull(petDeleteRequestDTO.getEmail());
+
+        if (!passwordEncoder.matches(petDeleteRequestDTO.getPassword(), member.getPassword())) {
+            return false;
+        }
+
+        return petRepository.deleteAPet(member.getId(), petDeleteRequestDTO.getPetId());
     }
 }
