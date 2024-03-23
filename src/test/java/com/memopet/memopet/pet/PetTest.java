@@ -241,7 +241,7 @@ public class PetTest {
         Pet findPet = petRepository.save(pet);
 
         Follow follow = Follow.builder()
-                .pet(findPet)
+                .followingPet(findPet)
                 .build();
 
         Follow savedFollowHistory = followRepository.save(follow);
