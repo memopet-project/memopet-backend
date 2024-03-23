@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -102,14 +103,27 @@ public class PetService {
     }
 
     @Transactional(readOnly = false)
-    public boolean deletePetProfile(PetDeleteRequestDto petDeleteRequestDTO) {
-
-        Member member = memberRepository.findByEmailAndDeletedDateIsNull(petDeleteRequestDTO.getEmail());
-
-        if (!passwordEncoder.matches(petDeleteRequestDTO.getPassword(), member.getPassword())) {
-            return false;
+    public PetResponseDto deletePetProfile(PetDeleteRequestDto petDeleteRequestDTO) {try {
+        Optional<Member> member = memberRepository.findOneWithAuthoritiesByEmail(petDeleteRequestDTO.getEmail());
+        if (member.isEmpty()) {
+            return new PetResponseDto('0',"존재하지 않거나 삭제된 이메일입니다"); // Member not found
         }
 
-        return petRepository.deleteAPet(member.getId(), petDeleteRequestDTO.getPetId());
+        if (!passwordEncoder.matches(petDeleteRequestDTO.getPassword(), member.get().getPassword())) {
+            return new PetResponseDto('0',"비밀번호를 다시 입력하세요.");
+        }
+
+        // Attempt to delete the pet profile
+        boolean deletionSuccessful = petRepository.deleteAPet(member.get().getId(), petDeleteRequestDTO.getPetId());
+
+        if (!deletionSuccessful) {
+            return new PetResponseDto('0',"프로필 삭제를 실패했습니다.");
+        }
+
+        return new PetResponseDto('1',"프로필이 삭제되었습니다.");
+    } catch (Exception e) {
+        return new PetResponseDto('0',"프로필 삭제를 실패하였습니다.");
+    }
+
     }
 }

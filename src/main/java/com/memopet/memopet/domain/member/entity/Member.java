@@ -42,6 +42,7 @@ public class Member extends FirstCreatedEntity implements Serializable {
     @Column(name = "login_fail_count")
     private int loginFailCount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_status")
     private MemberStatus memberStatus;
 

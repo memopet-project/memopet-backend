@@ -11,4 +11,6 @@ import lombok.*;
 public class PetResponseDto {
     @JsonProperty("dec_code")
     private char decCode;
+
+    private String message;
 }

@@ -46,7 +46,7 @@ public class MemoryController {
 
 
     /**
-     * 게시판 생성
+     * 추억 생성
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @PostMapping(value = "/memory")
@@ -63,7 +63,7 @@ public class MemoryController {
 
 
     /**
-     * (게시판 생성)-파일 검증
+     * (추억)-파일 검증
      */
     private boolean fileValidation(List<MultipartFile> files) {
         for (MultipartFile file : files) {
@@ -79,7 +79,7 @@ public class MemoryController {
     }
 
     /**
-     * (게시판 생성)-파일 타입 검증
+     * (추억)-파일 타입 검증
      */
     private boolean isValidFileType(String contentType) {
         return contentType != null && (contentType.equals("image/jpeg") || contentType.equals("image/jpg") || contentType.equals("image/png"));

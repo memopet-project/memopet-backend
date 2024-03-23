@@ -78,7 +78,6 @@ public class PetController {
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @PostMapping("/pet")
     public PetResponseDto deletePetProfile(@RequestBody PetDeleteRequestDto petDeleteRequestDTO) {
-        boolean isDeleted=petService.deletePetProfile(petDeleteRequestDTO);
-        return new PetResponseDto(isDeleted ? '1' : '0');
+        return petService.deletePetProfile(petDeleteRequestDTO);
     }
 }

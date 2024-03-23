@@ -1,9 +1,12 @@
 package com.memopet.memopet.pet;
 
+import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.pet.controller.PetController;
+import com.memopet.memopet.domain.pet.dto.PetDeleteRequestDto;
 import com.memopet.memopet.domain.pet.dto.PetListResponseDto;
 import com.memopet.memopet.domain.pet.dto.PetListWrapper;
+import com.memopet.memopet.domain.pet.dto.PetResponseDto;
 import com.memopet.memopet.domain.pet.repository.PetRepository;
 import com.memopet.memopet.domain.pet.repository.SpeciesRepository;
 import com.memopet.memopet.domain.pet.service.PetService;
@@ -16,6 +19,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -72,6 +78,20 @@ public class PetTest2 {
         Assertions.assertThat(petRepository.switchPetProfile(petId2)).isFalse();
 
     }
+    @Test
+    public void deleteAPetromRepo() throws Exception {
+        Long petId = 1L;
+        Optional<Member> member=memberRepository.findOneWithAuthoritiesByEmail("jae1@gmail.com");
+        Assertions.assertThat(member.isPresent()).isTrue();
+        PetDeleteRequestDto petDeleteRequestDto = new PetDeleteRequestDto(petId, "jae1@gmail.com", "Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23");
+        PetResponseDto petResponseDto=petService.deletePetProfile(petDeleteRequestDto);
+        Assertions.assertThat(petResponseDto.getDecCode()).isEqualTo('1');
+        System.out.println("petResponseDto.getMessage() = " + petResponseDto.getMessage());
+        System.out.println("petResponseDto.getDecCode() = " + petResponseDto.getDecCode());
+
+
+    }
+
 
 
 //    @PostConstruct

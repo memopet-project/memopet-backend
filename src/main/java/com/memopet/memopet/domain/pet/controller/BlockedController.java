@@ -1,6 +1,7 @@
 package com.memopet.memopet.domain.pet.controller;
 
 import com.memopet.memopet.domain.member.entity.Member;
+import com.memopet.memopet.domain.member.entity.MemberStatus;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.pet.dto.BlockRequestDto;
 import com.memopet.memopet.domain.pet.dto.BlockListWrapper;
@@ -70,6 +71,7 @@ public class BlockedController {
                 .phoneNum(passwordEncoder.encode("01052888888"))
                 .roles("ROLE_USER")
                 .activated(true)
+                .memberStatus(MemberStatus.NORMAL)
                 .build();
         Member findmember = memberRepository.save(member);
         Species species = Species.builder()

@@ -17,4 +17,10 @@ public class PetDeleteRequestDto {
 
     @NotEmpty(message = "Password must not be empty")
     private String password;
+
+    public PetDeleteRequestDto(Long petId, String email, String password) {
+        this.petId = petId;
+        this.email = email;
+        this.password = password;
+    }
 }
