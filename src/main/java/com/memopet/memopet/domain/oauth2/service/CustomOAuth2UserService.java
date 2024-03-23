@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 
+import com.memopet.memopet.domain.member.service.AuthService;
 import com.memopet.memopet.domain.oauth2.entity.OAuth2UserInfoFactory;
 
 import com.memopet.memopet.global.token.JwtTokenGenerator;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -19,6 +22,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import java.util.Map;
 
@@ -59,16 +64,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 
 //        Authentication authentication = authService.createAuthenticationObject(member);
-//
-        // Generate a JWT token
-
-
-
-//        authService.saveUserRefreshToken(member,refreshToken);
 //        ServletWebRequest servletContainer = (ServletWebRequest) RequestContextHolder.getRequestAttributes();
 //        HttpServletResponse response = servletContainer.getResponse();
+//        // Generate a JWT token
+//        String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
+//        String refreshToken = jwtTokenGenerator.generateRefreshToken(authentication);
+//
+//        authService.createRefreshTokenCookie(response,refreshToken);
+//
+//
+//        authService.saveUserRefreshToken(member,refreshToken);
 //        System.out.println(response);
-//        authService.creatRefreshTokenCookie(response,refreshToken);
+
 
         return new OAuth2UserPrincipal(member);
     }

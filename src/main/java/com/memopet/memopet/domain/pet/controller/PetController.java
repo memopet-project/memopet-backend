@@ -21,7 +21,7 @@ import java.io.IOException;
 public class PetController {
 
     private final PetService petService;
-    @PreAuthorize("hasAuthority('SCOPE_READ')")
+    @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @PostMapping(value="/pet/new",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public PetResponseDto savePet(HttpServletRequest request, @RequestPart(value="back_img_url") MultipartFile backImgUrl, @RequestPart(value="pet_profile_url") MultipartFile petProfileUrl, @RequestPart(value = "petRequestDto") @Valid PetRequestDto petRequestDto) throws IOException {
         System.out.println("save pet start");

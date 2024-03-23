@@ -23,9 +23,10 @@ public class Likes {
     @JoinColumn(name = "pet_id", nullable = false)
     private Pet petId;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memory_id", nullable = false)
-    private Memory memoryID;
+    private Memory memoryId;
 
     @Column(name = "liked_own_pet_id", nullable = false)
     private Long likedOwnPetId;

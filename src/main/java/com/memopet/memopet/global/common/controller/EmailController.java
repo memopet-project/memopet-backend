@@ -26,10 +26,14 @@ public class EmailController {
     }
 
     @PostMapping("/sign-in/verification-email")
-    public String checkVerificationCode(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+    public String checkVerificationCode(@RequestBody EmailAuthRequestDto emailDto) {
 
         String comment = emailService.checkVerificationCode(emailDto.getEmail(), emailDto.getCode());
         return comment;
     }
+
+
+
+
 
 }
