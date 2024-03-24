@@ -94,7 +94,7 @@ public class MemoryService {
     }
 
     /**
-     * 게시판 생성
+     * 추억 생성
      */
     public boolean postMemoryAndMemoryImages(List<MultipartFile> files, MemoryPostRequestDto memoryPostRequestDTO) {
         Memory memory = createAMemory(memoryPostRequestDTO);
@@ -111,7 +111,7 @@ public class MemoryService {
 
 
     /**
-     * (게시판 생성)-게시글
+     * (추억 생성)-추억 글
      */
     public Memory createAMemory(MemoryPostRequestDto memoryPostRequestDTO) {
         Pet pet = petRepository.findById(memoryPostRequestDTO.getPetId())
@@ -127,7 +127,7 @@ public class MemoryService {
     }
 
     /**
-     * (게시판 생성)-사진
+     * (추억 생성)-사진
      */
     public boolean createMemoryImages(Memory memory, List<MultipartFile> files) {
         List<MemoryImage> images = new ArrayList<>();
@@ -155,7 +155,7 @@ public class MemoryService {
 
 
     /**
-     * (게시판 생성)-중간에 오류 나면 생성 중이던 사진을 지운다 (db와 s3)
+     * (추억 생성)-중간에 오류 나면 생성 중이던 사진을 지운다 (db와 s3)
      */
     private void cleanupAndThrowException(List<MemoryImage> images, Exception originalException) {
         // If there was an issue saving images, delete uploaded files from S3
@@ -174,7 +174,7 @@ public class MemoryService {
     }
 
     /**
-     * (게시판 생성)-사진을 DB에 저장 한다.
+     * (추억 생성)-사진을 DB에 저장 한다.
      */
     private static MemoryImage getMemoryImage(Memory memory, MultipartFile file, String storedMemoryImgUrl) {
         try {
