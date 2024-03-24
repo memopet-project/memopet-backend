@@ -9,6 +9,8 @@ import com.memopet.memopet.global.common.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,7 @@ public class PetService {
     private final LikesRepository likesRepository;
     private final FollowRepository followRepository;
     private final CommentRepository commentRepository;
+    private final PasswordEncoder passwordEncoder;
     private final S3Uploader s3Uploader;
 
 
@@ -112,6 +115,7 @@ public class PetService {
 
         for (Pet p : pets) {
             petsContent.add(PetResponseDto.builder()
+                            .petId(p.getId())
                             .petName(p.getPetName())
                             .petDesc(p.getPetDesc())
                             .petGender(p.getGender())
@@ -196,5 +200,55 @@ public class PetService {
 
 
         return PetUpdateInfoResponseDto.builder().decCode('1').errMsg("수정 완료됬습니다.").build();
+    }
+
+    /**
+     * 내 프로필 리스트
+     */
+    @Transactional(readOnly = true)
+    public PetListWrapper profileList(Pageable pageable, Long petId) {
+
+        if (petId == null) {
+            // Set error code and description for missing or invalid email
+           return PetListWrapper.builder().decCode('0').build();
+
+        } else {
+            return PetListWrapper.builder().petList(petRepository.findPetsById(pageable,petId)).build();}
+
+    }
+
+    /**
+     * 펫 프로필 전환
+     */
+    @Transactional(readOnly = false)
+    public boolean switchProfile(PetSwitchRequestDto petSwitchRequestDTO) {
+
+        return petRepository.switchPetProfile(petSwitchRequestDTO.getPetId());
+    }
+
+    @Transactional(readOnly = false)
+    public PetProfileResponseDto deletePetProfile(PetDeleteRequestDto petDeleteRequestDTO) {
+        try {
+            Optional<Member> member = memberRepository.findOptionalMemberByEmail(petDeleteRequestDTO.getEmail());
+            if (member.isEmpty()) {
+                return new PetProfileResponseDto('0',"존재하지 않거나 삭제된 이메일입니다"); // Member not found
+            }
+
+            if (!passwordEncoder.matches(petDeleteRequestDTO.getPassword(), member.get().getPassword())) {
+                return new PetProfileResponseDto('0',"비밀번호를 다시 입력하세요.");
+            }
+
+            // Attempt to delete the pet profile
+            boolean deletionSuccessful = petRepository.deleteAPet(member.get().getId(), petDeleteRequestDTO.getPetId());
+
+            if (!deletionSuccessful) {
+                return new PetProfileResponseDto('0',"프로필 삭제를 실패했습니다.");
+            }
+
+            return new PetProfileResponseDto('1',"프로필이 삭제되었습니다.");
+        } catch (Exception e) {
+            return new PetProfileResponseDto('0',"프로필 삭제를 실패하였습니다.");
+        }
+
     }
 }

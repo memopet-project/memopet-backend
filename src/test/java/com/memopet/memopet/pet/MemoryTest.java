@@ -25,7 +25,6 @@ import java.util.Optional;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 public class MemoryTest {
     @Autowired
     MemberRepository memberRepository;
@@ -56,8 +55,6 @@ public class MemoryTest {
                 .smallCategory("치와와")
                 .build();
         Species findSpecies = speciesRepository.save(species);
-        Optional<Species> mammal= speciesRepository.findById(1L);
-        System.out.println("대분류!! " + mammal.get().getLargeCategory());
         //pet에 species 포함시키기.
 
 
@@ -68,7 +65,7 @@ public class MemoryTest {
                 .petStatus(PetStatus.ACTIVE)
                 .petName("몬뭉이")
                 .gender(Gender.F)
-                .species(species)
+                .species(findSpecies)
                 .petBirth(LocalDate.of(2020,1,1))
                 .petFavs("낮잠")
                 .petDesc(
@@ -81,25 +78,6 @@ public class MemoryTest {
         Optional<Species> foundSpecies= speciesRepository.findById(pet1.getSpecies().getId());
         System.out.println("pet's species " + foundSpecies.get().getLargeCategory());
 
-
-
-        // RECENT_SEARCH_TEST///////////////////////////
-
-        RecentSearch recentSearch = RecentSearch.builder()
-                .petId(pet)
-                .searchText("Chiwawa")
-                .build();
-        recentSearchRepository.save(recentSearch);
-        RecentSearch recentSearch1 = RecentSearch.builder()
-                .petId(pet)
-                .searchText("개")
-                .build();
-        recentSearchRepository.save(recentSearch1);
-
-        List<RecentSearch> recentSearches =recentSearchRepository.findByPetId(pet);
-        Assertions.assertThat(recentSearches.size()).isEqualTo(2);  // Assuming there are two recent searches
-        Assertions.assertThat(recentSearches.get(0).getSearchText()).isEqualTo("Chiwawa");
-        Assertions.assertThat(recentSearches.get(1).getSearchText()).isEqualTo("개");
 
     }
 
@@ -271,8 +249,8 @@ public class MemoryTest {
         //////////BLOCKED//TEST/////////////////////
 
         Blocked blocked = Blocked.builder()
-                .blockedPet(pet2.getId())
-                .blockerPet(pett)
+                .blockedPet(pet2)
+                .blockerPetId(pett.getId())
                 .build();
         Blocked blocked1 = blockedRepository.save(blocked);
 

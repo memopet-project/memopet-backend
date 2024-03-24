@@ -395,9 +395,9 @@ public class InitialUserInfo implements CommandLineRunner {
         commentRepository.saveAll(List.of(comment10,comment11,comment12,comment13,comment14));
 
 
-        Follow follow = Follow.builder().id(pet2.getId()).pet(pet1).build();
-        Follow follow1 = Follow.builder().id(pet3.getId()).pet(pet1).build();
-        Follow follow2 = Follow.builder().id(pet4.getId()).pet(pet1).build();
+        Follow follow = Follow.builder().petId(pet2.getId()).followingPet(pet1).build();
+        Follow follow1 = Follow.builder().petId(pet3.getId()).followingPet(pet1).build();
+        Follow follow2 = Follow.builder().petId(pet4.getId()).followingPet(pet1).build();
 
         followRepository.saveAll(List.of(follow,follow1,follow2));
 

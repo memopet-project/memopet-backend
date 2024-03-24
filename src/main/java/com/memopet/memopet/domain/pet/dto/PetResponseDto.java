@@ -26,7 +26,6 @@ public class PetResponseDto {
     private String backImgUrl;
     @JsonProperty("likes")
     private int likes;
-
 }
 
 

@@ -5,17 +5,19 @@ import com.memopet.memopet.domain.pet.entity.Pet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface FollowRepository extends JpaRepository<Follow, Long> {
+public interface FollowRepository extends JpaRepository<Follow, Long> , CustomFollowRepository {
+    @Query("SELECT CASE WHEN EXISTS (SELECT f FROM Follow f WHERE f.petId = :petId AND f.followingPet.id = :followingPetId) THEN true ELSE false END")
+    boolean existsByPetIdAndFollowingPetId(@Param("petId") Long petId, @Param("followingPetId") Long followingPetId);
 
+//        @Query("DELETE FROM Follow f where f.petId = :petId AND f.followingPet.id = :followingPetId")
+    @Transactional
+    void deleteByPetIdAndFollowingPetId(@Param("petId") Long petId, @Param("followingPetId") Long followingPetId);
 
+    @Query("select f from Follow f where f.followingPet = :petId")
+    List<Follow> findByPetId(@Param("petId") Pet pet);
 
-    @Query("select f from Follow f where f.pet = :petId")
-    List<Follow> findByPetId(@Param("petId") Pet petId);
-
-    @Query("select f from Follow f where f.pet = :petId and f.myPetId = :myPetId")
-    Optional<Follow> findByPetIdAndMyPetId(@Param("petId") Pet pet, Long myPetId);
 }

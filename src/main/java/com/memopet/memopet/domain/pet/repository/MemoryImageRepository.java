@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.Collection;
+
 public interface MemoryImageRepository  extends JpaRepository<MemoryImage, Long> {
 
     @Query(value = "select * from memory_image where memory_id = ?1 and deleted_date IS NULL", nativeQuery = true)

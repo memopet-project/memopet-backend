@@ -4,6 +4,7 @@ package com.memopet.memopet.domain.pet.entity;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
 import com.memopet.memopet.global.common.entity.LastModifiedEntity;
+import com.querydsl.core.annotations.QueryEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,18 +18,18 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@QueryEntity
 public class Follow extends FirstCreatedEntity {
 
     @Id
     @GeneratedValue
-    @Column(name = "follow_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pet_id")
-    private Pet pet;
+    @Column(name = "pet_id")
+    private Long petId;
 
-    @Column(name = "my_pet_id")
-    private Long myPetId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "following_pet",nullable = false)
+    private Pet followingPet;
 
 }
