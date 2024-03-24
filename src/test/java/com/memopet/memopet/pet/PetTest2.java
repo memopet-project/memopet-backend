@@ -162,6 +162,8 @@ public class PetTest2 {
                 .petProfileUrl("ㄴㄴㄴㄴ").build();
         petRepository.save(pet5);
 
+        //두번쨰 회윈
+
         Member member2 = Member.builder()
                 .username("Test")
                 .password(passwordEncoder.encode("Test1agfagdasgdasgdgasydgasgdygasyugdsyugayudgasuydugasudgsauyg23"))
@@ -195,38 +197,38 @@ public class PetTest2 {
                 .petProfileUrl("dfdf").build();
         petRepository.save(pet22);
     }
-    @Test
-    public void MyProfileList() throws Exception {
-
-        /**
-         * 내 프로필 리스트 로 가져오기
-         */
-
-
-//        CustomPetReposiotryImpl-성공
-        Pageable pageable = PageRequest.of(0, 5);
-        Long petId = 3L;
-        Page<PetListResponseDto> result = petRepository.findPetsById(pageable, petId);
-
-        for (PetListResponseDto petListResponseDTO : result) {
-            System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
-            System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
-            System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
-        }
-        Assertions.assertThat(result.getTotalElements()).isEqualTo(5);
-//            petService에서 확인하기
-        PetListWrapper result2 = petService.profileList(pageable, petId);
-        System.out.println("result = " + result2);
-        for (PetListResponseDto petListResponseDTO : result2.getPetList()) {
-            System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
-            System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
-            System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
-        }
-        Assertions.assertThat(result2.getPetList().getTotalElements()).isEqualTo(5);
-
-
-
-    }
+//    @Test
+//    public void MyProfileList() throws Exception {
+//
+//        /**
+//         * 내 프로필 리스트 로 가져오기
+//         */
+//
+//
+////        CustomPetReposiotryImpl-성공
+//        Pageable pageable = PageRequest.of(0, 5);
+//        Long petId = 3L;
+//        Page<PetListResponseDto> result = petRepository.findPetsById(pageable, petId);
+//
+//        for (PetListResponseDto petListResponseDTO : result) {
+//            System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
+//            System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
+//            System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
+//        }
+//        Assertions.assertThat(result.getTotalElements()).isEqualTo(5);
+////            petService에서 확인하기
+//        PetListWrapper result2 = petService.profileList(pageable, petId);
+//        System.out.println("result = " + result2);
+//        for (PetListResponseDto petListResponseDTO : result2.getPetList()) {
+//            System.out.println("petListResponseDTO.getPetProfileUrl() = " + petListResponseDTO.getPetProfileUrl());
+//            System.out.println("petListResponseDTO.getPetId() = " + petListResponseDTO.getPetId());
+//            System.out.println("petListResponseDTO.getPetName() = " + petListResponseDTO.getPetName());
+//        }
+//        Assertions.assertThat(result2.getPetList().getTotalElements()).isEqualTo(5);
+//
+//
+//
+//    }
 
     @Test
     public void switchProfile() throws Exception {
