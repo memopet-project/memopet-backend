@@ -25,7 +25,6 @@ import java.util.Optional;
 
 @SpringBootTest
 @Transactional
-@Rollback(value = false)
 public class MemoryTest {
     @Autowired
     MemberRepository memberRepository;
@@ -56,8 +55,6 @@ public class MemoryTest {
                 .smallCategory("치와와")
                 .build();
         Species findSpecies = speciesRepository.save(species);
-        Optional<Species> mammal= speciesRepository.findById(1L);
-        System.out.println("대분류!! " + mammal.get().getLargeCategory());
         //pet에 species 포함시키기.
 
 
@@ -68,7 +65,7 @@ public class MemoryTest {
                 .petStatus(PetStatus.ACTIVE)
                 .petName("몬뭉이")
                 .gender(Gender.F)
-                .species(species)
+                .species(findSpecies)
                 .petBirth(LocalDate.of(2020,1,1))
                 .petFavs("낮잠")
                 .petDesc(
