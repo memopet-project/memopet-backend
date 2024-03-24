@@ -4,7 +4,12 @@ package com.memopet.memopet.domain.member.service;
 import com.memopet.memopet.domain.member.dto.*;
 import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
+import com.memopet.memopet.domain.pet.entity.Comment;
+import com.memopet.memopet.domain.pet.entity.Memory;
 import com.memopet.memopet.domain.pet.entity.Pet;
+import com.memopet.memopet.domain.pet.repository.CommentRepository;
+import com.memopet.memopet.domain.pet.repository.MemoryRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,7 +26,10 @@ import java.util.List;
 public class MemberService  {
 
     private final MemberRepository memberRepository;
+    private final CommentRepository commentRepository;
+    private final MemoryRepository memoryRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EntityManager em;
 
     /**
      * to deactivate the member status
@@ -39,13 +48,31 @@ public class MemberService  {
             return deactivateMemberResponseDto;
         }
 
+
         member.deactivateMember(LocalDateTime.now(),deactivationReason,deactivationReasonComment, false);
 
         // find pet info and insert deleted_date
         List<Pet> pets = member.getPets();
+        List<Long> petIds = new ArrayList<>();
         for (Pet pet : pets) {
-            pet.changeDeletedDate(LocalDateTime.now());
+            pet.updateDeletedDate(LocalDateTime.now());
+            petIds.add(pet.getId());
         }
+
+        System.out.println("step 1");
+        // memory
+        List<Memory> memories = memoryRepository.findByPetIds(petIds);
+        for (Memory memory : memories) {
+            memory.updateDeleteDate(LocalDateTime.now());
+        }
+        System.out.println("step 2");
+        // comment deactivate
+        List<Comment> commentsByPetIds = commentRepository.findCommentsByPetIds(pets);
+        System.out.println("step 3");
+        for (Comment comment : commentsByPetIds) {
+            comment.updateDeleteDate(LocalDateTime.now());
+        }
+
 
         deactivateMemberResponseDto = DeactivateMemberResponseDto.builder().dscCode("1").build();
         return deactivateMemberResponseDto;
@@ -77,7 +104,11 @@ public class MemberService  {
         }else if(memberInfoRequestDto.getDscCode() == 3) { // cellphoneNum changes
             member.changePhoneNum(memberInfoRequestDto.getPhoneNum());
         }
-        memberInfoResponseDto = MemberInfoResponseDto.builder().dscCode("1").username(member.getUsername()).phoneNum(member.getPhoneNum()).email(member.getEmail()).build();
+        em.flush();
+        em.clear();
+
+        Member member1 = memberRepository.findByEmail(memberInfoRequestDto.getEmail());
+        memberInfoResponseDto = MemberInfoResponseDto.builder().dscCode("1").username(member1.getUsername()).phoneNum(member1.getPhoneNum()).email(member1.getEmail()).build();
 
         return memberInfoResponseDto;
 

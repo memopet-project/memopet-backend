@@ -1,6 +1,9 @@
 package com.memopet.memopet.global.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.memopet.memopet.domain.member.handler.CustomAccessDeniedHandler;
+import com.memopet.memopet.domain.member.handler.CustomAuthenticationEntryPoint;
 import com.memopet.memopet.domain.member.repository.RefreshTokenRepository;
 import com.memopet.memopet.domain.member.service.LoginService;
 import com.memopet.memopet.domain.member.service.LogoutHandlerService;
@@ -10,14 +13,7 @@ import com.memopet.memopet.domain.oauth2.service.CustomOAuth2UserService;
 import com.memopet.memopet.global.filter.JwtAccessTokenFilter;
 import com.memopet.memopet.global.filter.JwtRefreshTokenFilter;
 import com.memopet.memopet.global.token.JwtTokenUtils;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -30,12 +26,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
@@ -60,9 +50,11 @@ public class SecurityConfig {
     private final LoginService loginService;
     private final JwtTokenUtils jwtTokenUtils;
     private final RSAKeyRecord rsaKeyRecord;
+    private final CustomAuthenticationEntryPoint customFailureHandler;
     private final RefreshTokenRepository refreshTokenRepository;
     private final LogoutHandlerService logoutHandlerService;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
@@ -78,9 +70,8 @@ public class SecurityConfig {
                 .userDetailsService(loginService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> {
-                    ex.authenticationEntryPoint((request, response, authException) ->
-                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
-                })
+                    ex.authenticationEntryPoint(customFailureHandler);
+                    ex.accessDeniedHandler(customAccessDeniedHandler);})
                 .httpBasic(withDefaults())
                 .build();
     }
@@ -180,17 +171,17 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
     }
-    @Order(7)
-    @Bean
-    public SecurityFilterChain h2ConsoleSecurityFilterChainConfig(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity
-                .securityMatcher(new AntPathRequestMatcher(("/h2-console/**")))
-                .authorizeHttpRequests(auth->auth.anyRequest().permitAll())
-                .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
-                // to display the h2Console in Iframe
-                .headers(headers -> headers.frameOptions(withDefaults()).disable())
-                .build();
-    }
+//    @Order(7)
+//    @Bean
+//    public SecurityFilterChain h2ConsoleSecurityFilterChainConfig(HttpSecurity httpSecurity) throws Exception{
+//        return httpSecurity
+//                .securityMatcher(new AntPathRequestMatcher(("/h2-console/**")))
+//                .authorizeHttpRequests(auth->auth.anyRequest().permitAll())
+//                .csrf(csrf -> csrf.ignoringRequestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")))
+//                // to display the h2Console in Iframe
+//                .headers(headers -> headers.frameOptions(withDefaults()).disable())
+//                .build();
+//    }
 
 
     private CorsConfigurationSource corSetting() {

@@ -1,6 +1,7 @@
 package com.memopet.memopet.global.common.controller;
 
 import com.memopet.memopet.global.common.dto.EmailAuthRequestDto;
+import com.memopet.memopet.global.common.dto.EmailAuthResponseDto;
 import com.memopet.memopet.global.common.service.EmailService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -19,21 +20,17 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/sign-in/verification")
-    public String sendVerificationEmail(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
+    public EmailAuthResponseDto sendVerificationEmail(@RequestBody EmailAuthRequestDto emailDto) throws MessagingException, UnsupportedEncodingException {
 
-        String authCode = emailService.sendEmail(emailDto.getEmail());
-        return authCode;
+        String auth = emailService.sendEmail(emailDto.getEmail());
+        return EmailAuthResponseDto.builder().dscCode("1").authCode(auth).build();
     }
 
     @PostMapping("/sign-in/verification-email")
-    public String checkVerificationCode(@RequestBody EmailAuthRequestDto emailDto) {
+    public EmailAuthResponseDto checkVerificationCode(@RequestBody EmailAuthRequestDto emailDto) {
 
-        String comment = emailService.checkVerificationCode(emailDto.getEmail(), emailDto.getCode());
-        return comment;
+        EmailAuthResponseDto emailAuthResponseDto = emailService.checkVerificationCode(emailDto.getEmail(), emailDto.getCode());
+        return emailAuthResponseDto;
     }
-
-
-
-
 
 }

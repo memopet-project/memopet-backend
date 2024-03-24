@@ -9,6 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentDeleteRequestDto {
-    @JsonProperty("memory_id")
-    private String memory_id;
+    @JsonProperty("comment_id")
+    private Long commentId;
 }

@@ -10,10 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 public class CommentDeleteResponseDto {
 
-    @JsonProperty("total_pages")
-    private int totalPages;
-    @JsonProperty("current_page")
-    private int currentPage;
-    @JsonProperty("data_counts")
-    private int dataCounts;
+    @JsonProperty("dec_code")
+    private char decCode;
 }

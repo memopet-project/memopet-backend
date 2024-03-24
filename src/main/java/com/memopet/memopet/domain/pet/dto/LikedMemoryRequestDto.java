@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 public class LikedMemoryRequestDto {
     @JsonProperty("pet_id")
-    private String petId;
+    private Long petId;
     @JsonProperty("current_page")
     private int currentPage;
     @JsonProperty("data_counts")

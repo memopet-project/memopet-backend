@@ -1,5 +1,6 @@
 package com.memopet.memopet.global.common.service;
 
+import com.memopet.memopet.global.common.dto.EmailAuthResponseDto;
 import com.memopet.memopet.global.common.utils.RedisUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -44,7 +45,8 @@ public class EmailService {
         MimeMessage emailForm = createEmailForm(toEmail);
         //실제 메일 전송
         emailSender.send(emailForm);
-        setDataExpire(toEmail, authNum,60 * 1L);
+        setDataExpire(toEmail, authNum,60 * 3L);
+
         return authNum; //인증 코드 반환
     }
 
@@ -86,18 +88,18 @@ public class EmailService {
         authNum = key.toString();
     }
 
-    public String checkVerificationCode(String email, String code) {
-        String response = "Verification done successfully";
+    public EmailAuthResponseDto checkVerificationCode(String email, String code) {
 
+        EmailAuthResponseDto emailAuthResponseDto = EmailAuthResponseDto.builder().dscCode("1").build();
         String codeSaved = redisUtil.getValues(email);
         if(codeSaved.equals("false")) {
-            response = "Verification failed : code is expired..";
-            return response;
+            emailAuthResponseDto = EmailAuthResponseDto.builder().dscCode("0").errMessage("expired").build();
+            return emailAuthResponseDto;
         }
         if(!codeSaved.equals(code)) {
-            response = "Verification failed : input code is different";
-            return response;
+            emailAuthResponseDto = EmailAuthResponseDto.builder().dscCode("0").errMessage("different").build();
+            return emailAuthResponseDto;
         }
-        return response;
+        return emailAuthResponseDto;
     }
 }

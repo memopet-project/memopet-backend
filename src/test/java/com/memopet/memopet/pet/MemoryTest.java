@@ -263,7 +263,7 @@ public class MemoryTest {
 
         Likes likes = Likes.builder()
                 .memoryId(memory1)
-                .petId(pett)
+                .pet(pett)
                 .likedOwnPetId(pet2.getId())
                 .build();
         Likes likes1 = likesRepository.save(likes);

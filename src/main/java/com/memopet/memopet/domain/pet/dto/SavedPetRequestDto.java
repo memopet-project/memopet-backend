@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PetRequestDto {
+public class SavedPetRequestDto {
     @JsonProperty("email")
     @Email
     private String email;

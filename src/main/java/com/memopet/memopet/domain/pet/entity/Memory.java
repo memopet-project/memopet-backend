@@ -36,30 +36,29 @@ public class Memory extends FirstCreatedEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-    @Column(name = "memory_image_url_1")
-    private String memoryImageUrl1;
-    @Column(name = "memory_image_url_2")
-    private String memoryImageUrl2;
-    @Column(name = "memory_image_url_3")
-    private String memoryImageUrl3;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Audience audience;
 
+    public void updateDeleteDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
+    }
 
+    public void updateTitle(String memoryTitle) {
+        this.title = memoryTitle;
+    }
 
+    public void updateMemoryDate(LocalDateTime memoryDate) {
+        this.memoryDate = memoryDate;
+    }
 
-//    @ManyToOne
-//    @JoinColumn(name = "modified_id")
-//    private Member modifier;
+    public void updateDesc(String memoryDescription) {
+        this.memoryDescription = memoryDescription;
+    }
 
-
-
+    public void updateAudience(Audience audience) {
+        this.audience = audience;
+    }
 }
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Comment> comments;
-//
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<MemoryImage> memoryImages;
+
 
