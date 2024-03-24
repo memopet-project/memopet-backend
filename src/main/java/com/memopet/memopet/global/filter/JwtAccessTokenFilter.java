@@ -1,5 +1,6 @@
 package com.memopet.memopet.global.filter;
 
+import com.memopet.memopet.global.config.Code;
 import com.memopet.memopet.global.config.RSAKeyRecord;
 import com.memopet.memopet.global.token.JwtTokenUtils;
 import jakarta.servlet.FilterChain;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -76,7 +78,19 @@ public class JwtAccessTokenFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
         }catch (JwtValidationException jwtValidationException){
             log.error("[JwtAccessTokenFilter:doFilterInternal] Exception due to :{}",jwtValidationException.getMessage());
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,jwtValidationException.getMessage());
+
+            setResponse(response, jwtValidationException.getMessage());
+            //throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, jwtValidationException.getMessage());
         }
+    }
+    private void setResponse(HttpServletResponse response, String msg) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
+
+        JSONObject responseJson = new JSONObject();
+        responseJson.put("message", msg);
+        responseJson.put("code", HttpServletResponse.SC_NOT_ACCEPTABLE);
+
+        response.getWriter().print(responseJson);
     }
 }

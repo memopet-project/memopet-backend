@@ -42,13 +42,11 @@ public class LoginService implements UserDetailsService {
     public static final int MAX_ATTEMPT_COUNT = 4;
 
     @Override
-
     // 로그인시에 DB에서 유저정보와 권한정보를 가져와서 해당 정보를 기반으로 userdetails.User 객체를 생성해 리턴
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.out.println("loadUserByUsername start with Email : " + email);
 
-
-        return memberRepository.findOneWithAuthoritiesByEmail(email)
+        return memberRepository.findOptionalMemberByEmail(email)
                 .map(UserInfoConfig::new)
                 .orElseThrow(() -> {throw new UsernameNotFoundException(email + " -> 데이터베이스에서 찾을 수 없습니다.");});
     }
@@ -103,7 +101,6 @@ public class LoginService implements UserDetailsService {
         Member member = memberRepository.findByEmail(email);
         member.changePassword(passwordEncoder.encode(authCode));
 
-
         PasswordResetResponseDto passwordResetResponseDto = PasswordResetResponseDto.builder().dscCode("1").errMessage("complete reset password").build();
 
         // unlock the account
@@ -124,10 +121,10 @@ public class LoginService implements UserDetailsService {
 
     public DuplicationCheckResponseDto checkDupplication(String email) {
         DuplicationCheckResponseDto duplicationCheckResponseDto;
-        if(isValidEmail(email)) {
-            duplicationCheckResponseDto = DuplicationCheckResponseDto.builder().dscCode("1").errMessage("Email is valid").build();
+        if(!isValidEmail(email)) {
+            duplicationCheckResponseDto = DuplicationCheckResponseDto.builder().dscCode("1").errMessage("사용가능한 이메일 입니다").build();
         } else {
-            duplicationCheckResponseDto = DuplicationCheckResponseDto.builder().dscCode("0").errMessage("Email is not valid").build();
+            duplicationCheckResponseDto = DuplicationCheckResponseDto.builder().dscCode("0").errMessage("이미 저장된 이메일입니다").build();
         }
         return duplicationCheckResponseDto;
     }
@@ -146,16 +143,24 @@ public class LoginService implements UserDetailsService {
         MyIdResponseDto myIdResponseDto;
         if(member == null) {
             myIdResponseDto = MyIdResponseDto.builder().dscCode("0").build();
-        } else {
+        } else if(member.getProvideId() == null) {
             myIdResponseDto = MyIdResponseDto.builder().dscCode("1").email(member.getEmail()).build();
+        } else {
+            myIdResponseDto = MyIdResponseDto.builder().dscCode("2").email(member.getEmail()).build();
         }
         return myIdResponseDto;
     }
 
     public MyPasswordResponseDto saveNewPassword(String email, String password) {
         Member member = memberRepository.findByEmail(email);
-        member.changePassword(passwordEncoder.encode(password));
-        MyPasswordResponseDto myPasswordResponseDto = MyPasswordResponseDto.builder().dscCode("1").build();
+        MyPasswordResponseDto myPasswordResponseDto;
+        if(member != null) {
+            member.changePassword(passwordEncoder.encode(password));
+            myPasswordResponseDto =MyPasswordResponseDto.builder().dscCode("1").build();
+        } else {
+            myPasswordResponseDto = MyPasswordResponseDto.builder().dscCode("0").build();
+        }
+
         return myPasswordResponseDto;
     }
 }

@@ -29,7 +29,7 @@ public class Follow extends FirstCreatedEntity {
     private Long petId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "following_pet",referencedColumnName = "pet_id",nullable = false)
+    @JoinColumn(name = "following_pet",nullable = false)
     private Pet followingPet;
 
 }

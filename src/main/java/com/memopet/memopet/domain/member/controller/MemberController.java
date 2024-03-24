@@ -2,7 +2,7 @@ package com.memopet.memopet.domain.member.controller;
 
 import com.memopet.memopet.domain.member.dto.*;
 import com.memopet.memopet.domain.member.service.MemberService;
-import com.memopet.memopet.global.common.dto.EmailAuthRequestDto;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +29,10 @@ public class MemberController {
     // retrieve member's info
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @GetMapping("/member-profile")
-    public MemberProfileResponseDto retrieveMemberProfile(@RequestBody MemberProfileRequestDto memberProfileRequestDto) {
+    public MemberProfileResponseDto retrieveMemberProfile(Authentication authentication) {
+        System.out.println(authentication.getName());
 
-        MemberProfileResponseDto memberProfileResponseDto = memberService.getMemberProfile(memberProfileRequestDto.getEmail());
+        MemberProfileResponseDto memberProfileResponseDto = memberService.getMemberProfile(authentication.getName());
 
         return memberProfileResponseDto;
     }

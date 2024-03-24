@@ -10,10 +10,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> , CustomFollowRepository {
-        @Query("SELECT CASE WHEN EXISTS (SELECT f FROM Follow f WHERE f.petId = :petId AND f.followingPet.id = :followingPetId) THEN true ELSE false END")
-        boolean existsByPetIdAndFollowingPetId(@Param("petId") Long petId, @Param("followingPetId") Long followingPetId);
+    @Query("SELECT CASE WHEN EXISTS (SELECT f FROM Follow f WHERE f.petId = :petId AND f.followingPet.id = :followingPetId) THEN true ELSE false END")
+    boolean existsByPetIdAndFollowingPetId(@Param("petId") Long petId, @Param("followingPetId") Long followingPetId);
 
 //        @Query("DELETE FROM Follow f where f.petId = :petId AND f.followingPet.id = :followingPetId")
-        @Transactional
-        void deleteByPetIdAndFollowingPetId(@Param("petId") Long petId, @Param("followingPetId") Long followingPetId);
+    @Transactional
+    void deleteByPetIdAndFollowingPetId(@Param("petId") Long petId, @Param("followingPetId") Long followingPetId);
+
+    @Query("select f from Follow f where f.followingPet = :petId")
+    List<Follow> findByPetId(@Param("petId") Pet pet);
+
 }

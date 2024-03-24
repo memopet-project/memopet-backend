@@ -1,5 +1,6 @@
 package com.memopet.memopet.domain.pet.repository;
 
+import com.memopet.memopet.domain.pet.dto.LikesPerPetDto;
 import com.memopet.memopet.domain.pet.entity.Likes;
 import com.memopet.memopet.domain.pet.entity.Memory;
 import com.memopet.memopet.domain.pet.entity.Pet;
@@ -10,8 +11,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
 
-    Page<Likes> findLikesByPetId(Pet pet, Pageable pageable);
+    Page<Likes> findLikesByPetId(Long petId, Pageable pageable);
+
+    @Query(value="select pet_id from likes where liked_own_pet_id = ?1", nativeQuery = true)
+    List<Long> findLikesListByPetId(Long petId);
+
+
+    @Query(value="select pet_id AS petId, COUNT(pet_id) AS likes from likes where pet_id in ?1 group by pet_id", nativeQuery = true)
+    List<LikesPerPetDto> findLikesByPetIds(Set<Long> pet_ids);
+
+
+    @Query("select l from Likes l where l.pet = :petId and l.likedOwnPetId = :myPetId")
+    Likes findByPetIdAndLikedOwnPetId(@Param("petId") Pet pet, @Param("myPetId") long myPetId);
 }

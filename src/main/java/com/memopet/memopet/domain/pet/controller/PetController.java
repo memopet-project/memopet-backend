@@ -1,11 +1,8 @@
 package com.memopet.memopet.domain.pet.controller;
 
 
-import com.memopet.memopet.domain.member.entity.Member;
 import com.memopet.memopet.domain.pet.dto.*;
 import com.memopet.memopet.domain.pet.service.PetService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +22,9 @@ import java.io.IOException;
 public class PetController {
 
     private final PetService petService;
-
-
-    @PreAuthorize("hasAuthority('SCOPE_READ')")
-    @PostMapping(value = "/pet/new", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public PetResponseDto savePet(HttpServletRequest request, @RequestPart(value = "back_img_url") MultipartFile backImgUrl, @RequestPart(value = "pet_profile_url") MultipartFile petProfileUrl , @RequestPart(value = "petRequestDto") @Valid PetRequestDto petRequestDto) throws IOException {
+    @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
+    @PostMapping(value="/pet/new",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public SavedPetResponseDto savePet(@RequestPart(value="back_img_url") MultipartFile backImgUrl, @RequestPart(value="pet_profile_url") MultipartFile petProfileUrl, @RequestPart(value = "petRequestDto") @Valid SavedPetRequestDto petRequestDto) throws IOException {
         System.out.println("save pet start");
         System.out.println(backImgUrl);
         System.out.println(petProfileUrl);
@@ -47,8 +42,29 @@ public class PetController {
         System.out.println("-----------------------------------------------------");
         boolean isSaved = petService.savePet(backImgUrl, petProfileUrl, petRequestDto);
         System.out.println("pet saved complete1");
-        PetResponseDto petResponse = PetResponseDto.builder().decCode(isSaved ? '1' : '0').build();
+        SavedPetResponseDto petResponse = SavedPetResponseDto.builder().decCode(isSaved ? '1': '0').build();
         return petResponse;
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
+    @GetMapping("/pets")
+    public PetsResponseDto findPets(PetsRequestDto petsRequestDto) {
+        PetsResponseDto petResponseDto = petService.findPetsByPetId(petsRequestDto);
+        return petResponseDto;
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
+    @GetMapping("/profile-detail")
+    public PetDetailInfoResponseDto findPetDetailInfo(PetDetailInfoRequestDto petDetailInfoRequestDto) {
+        PetDetailInfoResponseDto petDetailInfoResponseDto  = petService.findPetDetailInfo(petDetailInfoRequestDto);
+        return petDetailInfoResponseDto;
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
+    @PatchMapping("/profile")
+    public PetUpdateInfoResponseDto findPets(PetUpdateInfoRequestDto petUpdateInfoRequestDto) {
+        PetUpdateInfoResponseDto petUpdateInfoResponseDto  = petService.updatePetInfo(petUpdateInfoRequestDto);
+        return petUpdateInfoResponseDto;
     }
 
     /**
@@ -65,19 +81,18 @@ public class PetController {
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @PatchMapping("/pet")
-    public PetResponseDto switchProfile(@RequestBody PetSwitchRequestDto petSwitchResponseDTO) {
+    public PetProfileResponseDto switchProfile(@RequestBody PetSwitchRequestDto petSwitchResponseDTO) {
         boolean isSwitched = petService.switchProfile(petSwitchResponseDTO);
-        return PetResponseDto.builder().decCode(isSwitched ? '1' : '0').build();
+        return PetProfileResponseDto.builder().decCode(isSwitched ? '1' : '0').build();
 
     }
 
     /**
      * 펫 프로필 삭제
      */
-
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @PostMapping("/pet")
-    public PetResponseDto deletePetProfile(@RequestBody PetDeleteRequestDto petDeleteRequestDTO) {
+    public PetProfileResponseDto deletePetProfile(@RequestBody PetDeleteRequestDto petDeleteRequestDTO) {
         return petService.deletePetProfile(petDeleteRequestDTO);
     }
 }

@@ -55,7 +55,7 @@ public class AuthService  {
         try{
             log.info("[AuthService:registerUser]User Registration Started with :::{}", signUpDto);
 
-            Optional<Member> member = memberRepository.findOneWithAuthoritiesByEmail(signUpDto.getEmail());
+            Optional<Member> member = memberRepository.findOptionalMemberByEmail(signUpDto.getEmail());
             if(member.isPresent()){
                 throw new Exception("User already Exists");
             }
@@ -92,7 +92,7 @@ public class AuthService  {
     @Transactional(readOnly = false)
     public LoginResponseDto getJWTTokensAfterAuthentication(Authentication authentication, HttpServletResponse response) {
         try {
-            var savedmember = memberRepository.findOneWithAuthoritiesByEmail(authentication.getName())
+            var savedmember = memberRepository.findOptionalMemberByEmail(authentication.getName())
                     .orElseThrow(()->{
                         log.error("[AuthService:userSignInAuth] User :{} not found", authentication.getName());
                         return new ResponseStatusException(HttpStatus.NOT_FOUND,"USER NOT FOUND ");});

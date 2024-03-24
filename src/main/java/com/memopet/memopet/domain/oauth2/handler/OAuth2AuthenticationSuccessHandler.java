@@ -60,8 +60,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String refreshTokenFromCookie = getCookie(request);
         System.out.println(refreshTokenFromCookie);
 
-        response.setHeader("AccessToken" , accessToken);
-        response.sendRedirect("http://localhost:3000/");
+        //response.setHeader("AccessToken" , accessToken);
+        //response.sendRedirect("http://localhost:3000/");
     }
 
     public Cookie createRefreshTokenCookie(HttpServletResponse response, String refreshToken) {

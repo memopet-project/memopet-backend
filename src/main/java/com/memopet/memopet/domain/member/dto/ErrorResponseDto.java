@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponse {
+public class ErrorResponseDto {
     @JsonProperty("status")
-    private String status;
+    private int status;
     @JsonProperty("timestamp")
     private LocalDateTime timestamp;
     @JsonProperty("message")
