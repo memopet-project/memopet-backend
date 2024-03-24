@@ -41,6 +41,9 @@ public class Pet extends FirstCreatedEntity {
     @Column(name = "pet_profile_url", nullable = false)
     private String petProfileUrl;
 
+    @Column(name = "pet_profile_frame", nullable = false)
+    private int petProfileFrame;
+
     @Column(name = "back_img_url")
     private String backImgUrl;
 
@@ -56,6 +59,7 @@ public class Pet extends FirstCreatedEntity {
     @Column(name = "pet_desc", nullable = false)
     private String petDesc;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Gender gender;
 
@@ -66,4 +70,8 @@ public class Pet extends FirstCreatedEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
+    /********** 변경감지용 메서드 **************/
+    public void updateDeletedDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
+    }
 }

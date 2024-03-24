@@ -1,5 +1,6 @@
 package com.memopet.memopet.domain.pet.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,7 +19,7 @@ public class Memory extends FirstCreatedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pet_id", nullable = false)
-    private Pet petId;
+    private Pet pet;
 
     @Column(name = "memory_title",nullable = false)
     private String title;
@@ -27,10 +28,10 @@ public class Memory extends FirstCreatedEntity {
     private LocalDateTime memoryDate;
 
     @Column(name = "memory_desc")
-    private String description;
+    private String memoryDescription;
 
     @Column(name = "like_count")
-    private Long likeCount;
+    private int likeCount;
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
@@ -39,19 +40,25 @@ public class Memory extends FirstCreatedEntity {
     @Column(nullable = false)
     private Audience audience;
 
+    public void updateDeleteDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
+    }
 
+    public void updateTitle(String memoryTitle) {
+        this.title = memoryTitle;
+    }
 
+    public void updateMemoryDate(LocalDateTime memoryDate) {
+        this.memoryDate = memoryDate;
+    }
 
-//    @ManyToOne
-//    @JoinColumn(name = "modified_id")
-//    private Member modifier;
+    public void updateDesc(String memoryDescription) {
+        this.memoryDescription = memoryDescription;
+    }
 
-
-
+    public void updateAudience(Audience audience) {
+        this.audience = audience;
+    }
 }
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<Comment> comments;
-//
-//    @OneToMany(fetch = FetchType.LAZY)
-//    private List<MemoryImage> memoryImages;
+
 

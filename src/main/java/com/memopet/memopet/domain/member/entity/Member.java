@@ -5,6 +5,7 @@ import com.memopet.memopet.domain.pet.entity.Pet;
 import com.memopet.memopet.global.common.entity.FirstCreatedEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class Member extends FirstCreatedEntity implements Serializable {
     @Column(name = "login_fail_count")
     private int loginFailCount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "member_status")
     private MemberStatus memberStatus;
 
@@ -57,7 +59,10 @@ public class Member extends FirstCreatedEntity implements Serializable {
     @Column(name="roles", nullable = false)
     private String roles;
 
-    @OneToMany(mappedBy = "member")
+
+    @BatchSize(size = 10) // Batch size를 지정한다
+    @Builder.Default
+    @OneToMany(mappedBy = "member", fetch=FetchType.LAZY)
     private List<Pet> pets = new ArrayList<>();
 
     @Column(name="provider")
@@ -80,6 +85,22 @@ public class Member extends FirstCreatedEntity implements Serializable {
     public void changeMemberStatus(MemberStatus memberStatus) {
         this.memberStatus = memberStatus;
     }
+    public void changePassword(String password) {
+        this.password = password;
+    }
 
+    public void deactivateMember(LocalDateTime deletedDate, String deactivationReason, String deactivation_reason_comment, boolean activated) {
+        this.deletedDate =deletedDate;
+        this.deactivationReason = deactivationReason;
+        this.deactivationReasonComment = deactivationReasonComment;
+        this.activated = activated;
+    }
 
+    public void changeUsername(String username) {
+        this.username = username;
+    }
+
+    public void changePhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
+    }
 }

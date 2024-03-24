@@ -18,20 +18,20 @@ public class Comment extends FirstCreatedEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memory_id")
+    @JoinColumn(name = "memory_id") // 메모리에 담긴 글이면 값이 있음
     private Memory memory;
 
     //부모 코맨트
     @Column(name = "parent_comment_id")
-    private Long parentCommentId;
+    private Long parentCommentId; // 자식이면 값이 있고 부모는 null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pet_id")
+    @JoinColumn(name = "pet_id") // 따뜻한 한마디에 달린 글이면 값이 있음
     private Pet pet;
 
     //코맨트 단 반려동물(프로필) ID
     @Column(nullable = false)
-    private Long commenterId;
+    private Long commenterId; // 작성자 pet_id
 
     @Column(nullable = false, length = 150)
     private String comment;
@@ -47,10 +47,9 @@ public class Comment extends FirstCreatedEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-
-//    댓글,댓글들 순서 이건 첫 생성일자랑 parent_comment_id로 오더하면 될듯하다.
-//    @Column(name = "count")
-//    private Long count;
-
+    public void updateComment(String comment) {this.comment = comment;}
+    public void updateDeleteDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
+    }
 
 }

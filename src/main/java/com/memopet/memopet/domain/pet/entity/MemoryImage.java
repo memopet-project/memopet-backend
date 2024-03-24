@@ -39,7 +39,6 @@ public class MemoryImage {
     @Column(name = "image_logical_name",nullable = false)
     private String imageLogicalName;
 
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
@@ -47,5 +46,8 @@ public class MemoryImage {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-    // 삭제한 사람 Id 필요?
+    public void updateDeletedDate(LocalDateTime deletedDate) {
+        this.deletedDate = deletedDate;
+    }
+
 }

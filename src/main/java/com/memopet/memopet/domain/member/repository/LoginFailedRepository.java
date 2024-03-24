@@ -10,31 +10,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = false)
 public class LoginFailedRepository {
     
     private final EntityManager em;
     private final MemberRepository memberRepository;
 
-    @Transactional(readOnly = false)
-    public void resetCount(String email) {
-        Member member = memberRepository.findByEmail(email);
+
+    public void resetCount(Member member) {
         member.increaseLoginFailCount(0);
 
     }
-    @Transactional(readOnly = false)
-    public int increment(String email) {
-        Member member = memberRepository.findByEmail(email);
-        member.increaseLoginFailCount(member.getLoginFailCount() + 1);
 
+    public int increment(Member member) {
+        member.increaseLoginFailCount(member.getLoginFailCount() + 1);
         return member.getLoginFailCount();
     }
-    @Transactional(readOnly = false)
-    public void changeMemberStatusAndActivation(Member memberInfo, MemberStatus memberStatus) {
-        Member member = memberRepository.findByEmail(memberInfo.getEmail());
+    public void changeMemberStatusAndActivation(Member member, MemberStatus memberStatus) {
         member.changeActivity(false);
         member.changeMemberStatus(memberStatus);
-
     }
 
 }

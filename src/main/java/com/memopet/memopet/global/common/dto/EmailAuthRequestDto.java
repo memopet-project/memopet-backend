@@ -13,6 +13,5 @@ public class EmailAuthRequestDto {
     @Email
     @NotBlank
     private String email;
-
     public String code;
 }
