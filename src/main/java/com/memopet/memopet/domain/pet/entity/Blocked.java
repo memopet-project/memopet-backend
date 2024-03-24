@@ -19,12 +19,14 @@ public class Blocked {
     @Column(name = "Blocked_id")
     private Long id;
 
-    @ManyToOne (fetch = FetchType.LAZY)
-    @JoinColumn(name = "blocker_pet", referencedColumnName = "pet_id",nullable = false)
-    private Pet blockerPet;
 
-    @Column(name = "blocked_pet", nullable = false)
-    private Long blockedPet;
+    @ManyToOne (fetch = FetchType.LAZY)
+    @JoinColumn(name = "blocked_pet", referencedColumnName = "pet_id",nullable = false)
+    private Pet blockedPet; //blockerPet이랑 blockedPet 바꿈.
+
+    @Column(name = "blocker_pet_id", nullable = false)
+    private Long blockerPetId;
+
 
     @CreatedDate @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
