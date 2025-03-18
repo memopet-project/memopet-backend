@@ -36,7 +36,7 @@ public class Member extends FirstCreatedEntity implements Serializable {
     @Column(nullable = false)
     private LocalDateTime agreeDate;
     @OneToMany(mappedBy = "member", fetch=FetchType.LAZY)
-    private List<Pet> pets = new ArrayList<>();
+    private List<Pet> pets;
 
 
 

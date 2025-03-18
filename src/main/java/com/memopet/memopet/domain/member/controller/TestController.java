@@ -25,14 +25,14 @@ public class TestController {
 //        });
 //    }
 
-//    @GetMapping("/test")
-//    public void test() {
-//        log.trace("TRACE!!");
-//        log.debug("DEBUG!!");
-//        log.info("INFO!!");
-//        log.warn("WARN!!");
-//        log.error("ERROR!!");
-//    }
+    @GetMapping("/test")
+    public void test() {
+        log.trace("TRACE!!");
+        log.debug("DEBUG!!");
+        log.info("INFO!!");
+        log.warn("WARN!!");
+        log.error("ERROR!!");
+    }
 
     @GetMapping("/send-sms")
     public RestResult sendSms(@RequestParam String recipientPhone) {

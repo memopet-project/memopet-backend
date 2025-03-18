@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import static com.memopet.memopet.domain.member.entity.QMemberSocial.memberSocial;
 
-
 @Repository
 public class CustomMemberRepositoryImpl implements CustomMemberRepository {
 
