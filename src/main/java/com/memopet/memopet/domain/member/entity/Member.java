@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -48,6 +47,6 @@ public class Member extends FirstCreatedEntity implements Serializable {
         this.deactivationReasonComment = deactivationReasonComment;
     }
     public void setMemberId(String memberId) {
-        this.memberId =memberId;
+        this.memberId = memberId;
     }
 }

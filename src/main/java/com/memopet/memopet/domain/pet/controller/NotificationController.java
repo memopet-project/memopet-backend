@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/v1")
 public class NotificationController {
 
     private final NotificationService notificationService;

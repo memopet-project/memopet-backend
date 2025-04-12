@@ -59,7 +59,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain signInSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .securityMatcher(new AntPathRequestMatcher("/sign-in/**"))
+                .securityMatcher(new AntPathRequestMatcher("/v1/sign-in/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corSetting()))
                 .authorizeHttpRequests(auth ->
@@ -77,7 +77,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain socialSignInSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .securityMatcher(new AntPathRequestMatcher("/oauth2/**"))
+                .securityMatcher(new AntPathRequestMatcher("/v1/oauth2/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corSetting()))
                 .authorizeHttpRequests(auth ->
@@ -97,7 +97,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .securityMatcher(new AntPathRequestMatcher("/api/**"))
+                .securityMatcher(new AntPathRequestMatcher("/v1/api/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corSetting()))
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
@@ -120,7 +120,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain logoutSecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .securityMatcher(new AntPathRequestMatcher("/logout/**"))
+                .securityMatcher(new AntPathRequestMatcher("/v1/logout/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corSetting()))
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
@@ -143,7 +143,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain registerSecurityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
-                .securityMatcher(new AntPathRequestMatcher("/sign-up/**"))
+                .securityMatcher(new AntPathRequestMatcher("/v1/sign-up/**"))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(corsCustomizer -> corsCustomizer.configurationSource(corSetting()))
                 .authorizeHttpRequests(auth ->
@@ -160,7 +160,7 @@ public class SecurityConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration configuration = new CorsConfiguration();
 
-                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
                 configuration.setAllowedMethods(Collections.singletonList("*"));
                 configuration.setAllowCredentials(true);
                 configuration.setAllowedHeaders(Collections.singletonList("*"));

@@ -21,7 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Validated
 @Slf4j
-@RequestMapping("/api/follow")
+@RequestMapping("/v1/api")
 public class FollowController {
     private final FollowService followService;
 
@@ -29,7 +29,7 @@ public class FollowController {
      * 팔로우
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
-    @PostMapping("")
+    @PostMapping("/follow")
     public RestResult FollowAPet(@RequestBody @Valid FollowRequestDto followRequestDTO) {
         FollowResponseDto followResponseDto = followService.followAPet(followRequestDTO);
 
@@ -43,7 +43,7 @@ public class FollowController {
      * 리스트 조회- 1:팔로워 2:팔로우
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
-    @GetMapping("")
+    @GetMapping("/follow")
     public RestResult followList(FollowListRequestDto followListRequestDto){
         FollowListResponseDto followListResponseDto = followService.followList(followListRequestDto);
 
@@ -57,7 +57,7 @@ public class FollowController {
      * 팔로우 취소
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
-    @DeleteMapping("")
+    @DeleteMapping("/follow")
     public RestResult unfollow(@RequestParam("petId") Long petId, @RequestParam("followingPetId") Long followingPetId, Authentication authentication) {
 //        boolean validatePetResult = petService.validatePetRequest(authentication.getName(), petId);
 //        if (!validatePetResult) {

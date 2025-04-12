@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/block")
+@RequestMapping("/v1/api")
 @Validated
 public class BlockedController {
     private final BlockedService blockedService;
@@ -29,7 +29,7 @@ public class BlockedController {
      * 차단 리스트
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
-    @GetMapping("")
+    @GetMapping("/block")
     public RestResult blockedPetList(BlockListRequestDto blockListRequestDto, Authentication authentication) {
         BlockListResponseDto blockListResponseDto = blockedService.blockedPetList(blockListRequestDto, authentication.getName());
         Map<String, Object> dataMap = new LinkedHashMap<>();
@@ -42,7 +42,7 @@ public class BlockedController {
      * 차단
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
-    @PostMapping("")
+    @PostMapping("/block")
     public RestResult BlockAPet(@RequestBody @Valid BlockRequestDto blockRequestDTO, Authentication authentication) {
         BlockedResponseDto blockedResponseDto = blockedService.blockApet(blockRequestDTO, authentication.getName());
         Map<String, Object> dataMap = new LinkedHashMap<>();
@@ -55,7 +55,7 @@ public class BlockedController {
      * 차단 취소
      */
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
-    @DeleteMapping("")
+    @DeleteMapping("/block")
     public RestResult CancelBlocking(@RequestParam("blockerPetId")Long petId, @RequestParam("blockedPetId") Long blockedPetId, Authentication authentication) {
         BlockedResponseDto blockedResponseDto = blockedService.unblockAPet(petId, blockedPetId, authentication.getName());
         Map<String, Object> dataMap = new LinkedHashMap<>();

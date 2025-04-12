@@ -76,7 +76,6 @@ public class PetService {
         if (petInfoByEmail.size()>4) throw new BadRequestRuntimeException("프로필은 5개 이하로 만들수있습니다.");
         PetStatus petStatus = petInfoByEmail.size()> 0 ? PetStatus.ACTIVE : PetStatus.DEACTIVE;
 
-
         String petFavs = petRequestDto.getPetFavs() != null && !petRequestDto.getPetFavs().equals("") ? petRequestDto.getPetFavs() : null;
         String petFavs2 = petRequestDto.getPetFavs2() != null && !petRequestDto.getPetFavs2().equals("") ? petRequestDto.getPetFavs2() : null;
         String petFavs3 = petRequestDto.getPetFavs3() != null && !petRequestDto.getPetFavs3().equals("") ? petRequestDto.getPetFavs3() : null;

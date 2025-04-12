@@ -8,10 +8,7 @@ import com.memopet.memopet.global.common.dto.RestResult;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,6 +16,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/v1")
 public class SocialLoginController {
     private final OauthService oauthService;
 

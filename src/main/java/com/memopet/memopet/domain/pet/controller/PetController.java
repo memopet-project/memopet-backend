@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/v1/api")
 @Slf4j
 public class PetController {
 
