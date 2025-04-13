@@ -44,7 +44,7 @@ public class PetService {
     private final PasswordEncoder passwordEncoder;
 
 
-    @Transactional(readOnly = false)
+    @Transactional
     public SavedPetResponseDto savePet(Optional<MultipartFile> petImg, Optional<MultipartFile> backgroundImg, SavedPetRequestDto petRequestDto){
         String storedPetImgName = null;
 
@@ -253,7 +253,7 @@ public class PetService {
         return petDetailInfoResponseDto;
     }
 
-    @Transactional(readOnly = false)
+    @Transactional
     public PetUpdateInfoResponseDto updatePetInfo(Optional<MultipartFile> backgroundImg , Optional<MultipartFile> petImg, PetUpdateInfoRequestDto petUpdateInfoRequestDto) throws Exception {
         Optional<Pet> petOptional = petRepository.findById(petUpdateInfoRequestDto.getPetId());
         if(petOptional.isEmpty()) throw new BadRequestRuntimeException("Pet Not Found");
@@ -308,7 +308,7 @@ public class PetService {
     /**
      * 펫 프로필 전환
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public PetProfileResponseDto switchProfile(PetSwitchRequestDto petSwitchRequestDTO) {
         Optional<Pet> pet = petRepository.findById(petSwitchRequestDTO.getPetId());
         Optional<Pet> newRepPet = petRepository.findById(petSwitchRequestDTO.getNewRepPetId());
@@ -326,7 +326,7 @@ public class PetService {
     /**
      * 펫 프로필 삭제 -Pet(deletedDate)
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public PetProfileResponseDto deletePetProfile(PetDeleteRequestDto petDeleteRequestDTO) {
         try {
             Optional<MemberSocial> memberSocialOptional = memberSocialRepository.findMemberByEmail(petDeleteRequestDTO.getEmail());

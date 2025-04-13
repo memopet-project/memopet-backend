@@ -5,7 +5,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.memopet.memopet.global.common.dto.ImageUploadDto;
 import lombok.RequiredArgsConstructor;

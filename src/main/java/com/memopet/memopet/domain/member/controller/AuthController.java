@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Tag(name = "인증", description = "인증 관련 api 입니다.")	// (1)
@@ -33,57 +32,42 @@ public class  AuthController {
      */
     @PostMapping("/sign-in")
     public RestResult authenticateUser(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        log.info("sign-in start");
         // get an authentication object to generate access and refresh token
         Authentication authentication = authService.authenticateUser(loginRequestDto);
         // generate access and refresh token
         LoginResponseDto loginResponseDto = authService.getJWTTokensAfterAuthentication(authentication);
 
         response.setHeader("Authorization", "Bearer " + loginResponseDto.getAccessToken());
-
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("loginInfo", loginResponseDto);
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("loginInfo", loginResponseDto));
 
     }
 
     @GetMapping("/sign-in/duplication-check")
     public RestResult emailDuplicationCheck(DuplicationCheckRequestDto duplicationCheckRequestDto ) {
-        DuplicationCheckResponseDto duplicationCheckResponseDto = loginService.checkDupplication(duplicationCheckRequestDto.getEmail());
+        DuplicationCheckResponseDto duplicationCheckResponseDto = loginService.checkDuplication(duplicationCheckRequestDto.getEmail());
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("duplicationCheckResponse", duplicationCheckResponseDto);
-
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("duplicationCheckResponse", duplicationCheckResponseDto));
     }
 
     @PostMapping("/sign-in/my-id")
     public RestResult findMyId(@RequestBody MyIdRequestDto myIdRequestDto) {
         MyIdResponseDto myIdResponseDto = loginService.findIdByUsernameAndPhoneNum(myIdRequestDto.getUsername(), myIdRequestDto.getPhoneNum());
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("findMyIdResponse", myIdResponseDto);
 
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("findMyIdResponse", myIdResponseDto));
     }
 
     @PostMapping("/sign-in/my-password")
     public RestResult changeMyPassword(@RequestBody MyPasswordRequestDto  myPasswordRequestDto) {
         MyPasswordResponseDto myPasswordResponseDto = loginService.saveNewPassword(myPasswordRequestDto.getEmail(), myPasswordRequestDto.getPassword());
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("changeMyPasswordResponse", myPasswordResponseDto);
-
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("changeMyPasswordResponse", myPasswordResponseDto));
     }
 
     @PostMapping("/sign-in/password-reset")
     public RestResult resetMyPassword(@RequestBody MyPasswordRequestDto  myPasswordRequestDto) {
         ResetPasswordResponseDto resetPasswordResponseDto = loginService.resetNewPassword(myPasswordRequestDto.getEmail());
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("changeMyPasswordResponse", resetPasswordResponseDto);
-
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("changeMyPasswordResponse", resetPasswordResponseDto));
     }
 
     /**
@@ -93,14 +77,11 @@ public class  AuthController {
      */
     @PostMapping("/sign-up")
     public RestResult registerUser(@Valid @RequestBody SignUpRequestDto signUpRequestDto, HttpServletResponse response){
-        log.info("sign-up start");
         LoginResponseDto loginResponseDto = authService.join(signUpRequestDto);
 
         response.setHeader("Authorization", "Bearer " + loginResponseDto.getAccessToken());
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("sigupInfo", loginResponseDto);
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("sigupInfo", loginResponseDto));
     }
 
 

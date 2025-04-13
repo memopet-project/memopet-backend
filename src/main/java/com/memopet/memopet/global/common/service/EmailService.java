@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Random;
 
 @Component
@@ -27,32 +26,19 @@ public class EmailService {
         emailRabbitPublisher.pubsubMessage(emailMessageDto);
     }
     @Transactional(readOnly = false)
-    //실제 메일 전송
-    public EmailAuthResponseDto sendEmail(String toEmail)  {
-        // auth num 값 생성
-        String authNum = createCode();
 
+    public EmailAuthResponseDto sendEmail(String toEmail)  {
+        String authNum = createCode();
         long verificationEntityId = setDataExpire(authNum);
 
-        //메일전송에 필요한 정보 설정
         sendRequestToRabbitMqForSendingEmail(verificationEntityId,toEmail,authNum);
-        log.info("authNum : {}", authNum);  // tip 이게 올바른 사용법입니다.
-        log.info("authNum : " + authNum);
+        //log.info("authNum : {}", authNum);
 
-//        return new EmailAuthResponseDto(authNum, verificationEntityId);   tip 옆처럼 차라리 생성자로 만드는게 나을수도 있기 때문에 한번더 고민이 필요(빌더패턴의 단점인 코드의 양이 많아지게 됨)
+        // Since the builder pattern can result in more verbose code, it might be worth considering using a constructor instead, depending on the context.
         return EmailAuthResponseDto.builder().authCode(authNum).verificationStatusId(verificationEntityId).build();
     }
 
     private long setDataExpire(String authKey) {
-        //Redis에 3분동안 인증코드 {email, authKey} 저장
-//        try {
-//            redisUtil.setDataExpire(email, authKey,duration);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            // 에러처리 필요
-//        }
-
-        // tip 빌더패턴을 사용하는거면 이렇게 필듭별로 줄바꿈처리를 해주는게 그나마 가독성에 좋을 것 같습니다.
         VerificationStatusEntity verificationStatusEntity = VerificationStatusEntity.builder()
             .expiredAt(LocalDateTime.now().plusMinutes(3))
             .authKey(authKey)
@@ -60,7 +46,6 @@ public class EmailService {
 
         VerificationStatusEntity savedEntity = vertificationStatusRepository.save(verificationStatusEntity);
 
-        // tip 여기에서 값을 리턴하는 이유는 무엇인가요? 프론트엔드로 전달해서 추후에 값을 사용해서 매칭하는데 활용하나요?
         return savedEntity.getId();
     }
 
@@ -103,25 +88,22 @@ public class EmailService {
     }
 
     public EmailAuthResponseDto checkVerificationCode(EmailAuthRequestDto emailAuthRequestDto) {
-        log.info("email : " + emailAuthRequestDto.getEmail());
-        log.info("code : " + emailAuthRequestDto.getConfirmCode());
-
         //String codeSaved = redisUtil.getValues(email);
-        Optional<VerificationStatusEntity> verificationStatus = vertificationStatusRepository.findById(emailAuthRequestDto.getVerificationStatusId());
+        VerificationStatusEntity verificationStatusEntity = vertificationStatusRepository
+                .findById(emailAuthRequestDto.getVerificationStatusId())
+                .orElseThrow(() -> new BadRequestRuntimeException("verificationStatusId does not exist"));
 
-        if(verificationStatus.isEmpty()) {
-            throw new BadRequestRuntimeException("verificationStatusId does not exist");
-        }
 
-        VerificationStatusEntity verificationStatusEntity = verificationStatus.get();
         log.info("code : " + verificationStatusEntity.getAuthKey());
 
         if(LocalDateTime.now().isAfter(verificationStatusEntity.getExpiredAt())) {
             throw new BadRequestRuntimeException("expired");
         }
+
         if(!emailAuthRequestDto.getConfirmCode().equals(verificationStatusEntity.getAuthKey())) {
             throw new BadRequestRuntimeException("different");
         }
+
         return EmailAuthResponseDto.builder().build();
     }
 }

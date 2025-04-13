@@ -19,11 +19,13 @@ public class CustomMemoryImageRepositoryImpl implements CustomMemoryImageReposit
     }
 
     @Override
-    public void updateDeletedDate(List<Long> memoryImageIds) {
-            queryFactory
-                .update(memoryImage)
+    public void deleteAllMemoryImages(List<Long> memoryIds) {
+
+        queryFactory.update(memoryImage)
                 .set(memoryImage.deletedDate, LocalDateTime.now())
-                .where(memoryImage.id.in(memoryImageIds))
+                .where(memoryImage.memory.id.in(memoryIds))
+                .where(memoryImage.deletedDate.isNull())
                 .execute();
     }
+
 }

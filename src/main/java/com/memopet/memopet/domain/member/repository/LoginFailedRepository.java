@@ -19,7 +19,6 @@ public class LoginFailedRepository {
 
     public void resetCount(MemberSocial member) {
         member.increaseLoginFailCount(0);
-
     }
 
     public int increment(MemberSocial member) {

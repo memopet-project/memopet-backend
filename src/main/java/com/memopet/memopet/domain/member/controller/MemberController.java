@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -21,13 +20,10 @@ public class MemberController {
     // update member's info
     @PreAuthorize("hasAuthority('SCOPE_USER_AUTHORITY')")
     @PatchMapping("/member-info")
-    public RestResult changeMemberInfo(@RequestBody @Valid MemberInfoRequestDto memberInfoRequestDto) {
-        MemberInfoResponseDto memberInfoResponseDto = memberService.changeMemberInfo(memberInfoRequestDto);
+    public RestResult changeMemberInfo(@RequestBody @Valid MemberInfoUpdateRequestDto memberInfoUpdateRequestDto) {
+        MemberInfoResponseDto memberInfoResponseDto = memberService.changeMemberInfo(memberInfoUpdateRequestDto);
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("changeMemberInfoResponse", memberInfoResponseDto);
-
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("changeMemberInfoResponse", memberInfoResponseDto));
     }
 
     // retrieve member's info
@@ -36,10 +32,7 @@ public class MemberController {
     public RestResult retrieveMemberProfile(Authentication authentication) {
         MemberProfileResponseDto memberProfileResponseDto = memberService.getMemberProfile(authentication.getName());
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("retrieveMemberProfileResponse", memberProfileResponseDto);
-
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("retrieveMemberProfileResponse", memberProfileResponseDto));
     }
 
     // deactivate member
@@ -48,9 +41,6 @@ public class MemberController {
     public RestResult deactivateMember(@RequestBody DeactivateMemberRequestDto deactivateMemberRequestDto) {
         DeactivateMemberResponseDto deactivateMemberResponseDto = memberService.deactivateMember(deactivateMemberRequestDto.getEmail(), deactivateMemberRequestDto.getDeactivationReason(), deactivateMemberRequestDto.getDeactivationReasonComment());
 
-        Map<String, Object> dataMap = new LinkedHashMap<>();
-        dataMap.put("deactivateMemberResponse", deactivateMemberResponseDto);
-
-        return new RestResult(dataMap);
+        return new RestResult(Map.of("deactivateMemberResponse", deactivateMemberResponseDto));
     }
 }

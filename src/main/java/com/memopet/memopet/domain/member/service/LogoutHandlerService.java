@@ -22,7 +22,7 @@ public class LogoutHandlerService implements LogoutHandler {
     private final RefreshTokenRepository refreshTokenRepo;
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
 
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

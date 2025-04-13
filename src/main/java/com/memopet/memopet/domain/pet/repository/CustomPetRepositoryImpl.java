@@ -34,6 +34,16 @@ public class CustomPetRepositoryImpl implements CustomPetRepository{
         this.s3Uploader = s3Uploader;
     }
 
+    @Override
+    @Transactional
+    public boolean deleteAllPets(List<Long> petIds) {
+        long updatedCount = queryFactory.update(pet)
+                .set(pet.deletedDate, LocalDateTime.now())
+                .where(pet.id.in(petIds))
+                .where(pet.deletedDate.isNull())
+                .execute();
+        return updatedCount > 0;
+    }
 
     @Override
     public List<PetListResponseDto> findPetsById(Long petId) {
@@ -79,6 +89,7 @@ public class CustomPetRepositoryImpl implements CustomPetRepository{
     }
 
     @Override
+    @Transactional
     public boolean deleteAPet(Long memberId, Long petId) {
         long updatedCount = queryFactory.update(pet)
                 .set(pet.deletedDate, LocalDateTime.now())
@@ -89,6 +100,7 @@ public class CustomPetRepositoryImpl implements CustomPetRepository{
     }
 
     @Override
+    @Transactional
     public void updateMemoryInfo(String petImgUrl, String backgroundImgUrl, PetUpdateInfoRequestDto petUpdateInfoRequestDto) {
 
         String petFavs = petUpdateInfoRequestDto.getPetFavs() != null && !petUpdateInfoRequestDto.getPetFavs().equals("") ? petUpdateInfoRequestDto.getPetFavs() : null;

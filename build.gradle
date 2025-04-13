@@ -54,6 +54,8 @@ dependencies {
 
     implementation 'org.modelmapper:modelmapper:3.1.0'
 
+    implementation 'p6spy:p6spy:3.9.1'
+
     //Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"

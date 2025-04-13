@@ -11,7 +11,6 @@ import com.memopet.memopet.domain.member.mapper.MemberInfoMapper;
 import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.member.repository.MemberSocialRepository;
 import com.memopet.memopet.domain.member.repository.RefreshTokenRepository;
-import com.memopet.memopet.global.common.exception.BadLoginCredentialsException;
 import com.memopet.memopet.global.common.exception.BadRequestRuntimeException;
 import com.memopet.memopet.global.common.service.MemberCreationRabbitPublisher;
 import com.memopet.memopet.global.common.utils.BusinessUtil;
@@ -27,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -52,24 +50,26 @@ public class AuthService  {
      * @param signUpDto
      * @return user_id
      */
-    @Transactional(readOnly = false)
+    @Transactional
     public LoginResponseDto join (SignUpRequestDto signUpDto)  {
 
-        log.info("[AuthService:registerUser]User Registration Started with :::{}", signUpDto.getEmail());
-        Optional<MemberSocial> memberSocialByEmail = memberSocialRepository.findMemberByEmail(signUpDto.getEmail());
-        if(memberSocialByEmail.isPresent()) throw new BadRequestRuntimeException("User Already Exists");
+        memberSocialRepository.findMemberByEmail(signUpDto.getEmail())
+                .ifPresent(memberSocial -> {
+                    throw new BadRequestRuntimeException("User Already Exists");
+                });
 
         // RabbitMQ 로 채번
         String memberId = memberCreationRabbitPublisher.pubsubMessage();
 
         log.info("response memberId : {}", memberId);
-        // check if Member Entity does not exist
-        Optional<Member> memberByPhoneNum = memberRepository.findMemberByPhoneNum(signUpDto.getPhoneNum());
 
-        if(memberByPhoneNum.isEmpty()) {
-            Member member = memberInfoMapper.convertToMemberEntity(signUpDto, memberId);
-            memberRepository.save(member);
-        }
+        // check if Member Entity does not exist
+        memberRepository.findMemberByPhoneNum(signUpDto.getPhoneNum())
+                .orElseGet(()->{
+                    Member member = memberInfoMapper.convertToMemberEntity(signUpDto, memberId);
+                    memberRepository.save(member);
+                    return member;
+                });
 
         MemberCreationDto memberCreationDto = MemberCreationDto.builder()
                 .email(signUpDto.getEmail())
@@ -93,18 +93,18 @@ public class AuthService  {
 
         log.info("[AuthService:registerUser] User:{} Successfully registered",memberSocial.getUsername());
         return  LoginResponseDto.builder()
-                .username(memberSocial.getUsername())
-                .userStatus(memberSocial.getMemberStatus())
-                .userRole(memberSocial.getRoles().equals("ROLE_USER") ? "GU" : "SA")
-                .loginFailCount(memberSocial.getLoginFailCount())
-                .phoneNumYn(memberSocial.getPhoneNum().isEmpty() ? "N" : "Y")
-                .memberId(memberSocial.getMemberId())
-                .accessToken(accessToken)
-                .build();
+                    .username(memberSocial.getUsername())
+                    .userStatus(memberSocial.getMemberStatus())
+                    .userRole(memberSocial.getRoles().equals("ROLE_USER") ? "GU" : "SA")
+                    .loginFailCount(memberSocial.getLoginFailCount())
+                    .phoneNumYn(memberSocial.getPhoneNum().isEmpty() ? "N" : "Y")
+                    .memberId(memberSocial.getMemberId())
+                    .accessToken(accessToken)
+                    .build();
     }
 
 
-    @Transactional(readOnly = false)
+    @Transactional
     public LoginResponseDto getJWTTokensAfterAuthentication(Authentication authentication) {
         MemberSocial savedmember = businessUtil.getValidEmail(authentication.getName());
         String accessToken = jwtTokenGenerator.generateAccessToken(authentication);
@@ -148,22 +148,17 @@ public class AuthService  {
 
     public Authentication authenticateUser(LoginRequestDto loginRequestDto) {
 
-        log.info("authenticateUser method starts");
         // check if the email is valid
-        businessUtil.isValidEmail(loginRequestDto.getEmail());
+        MemberSocial validEmail = businessUtil.getValidEmail(loginRequestDto.getEmail());
 
         // check if the account is locked
         businessUtil.isAccountLock(loginRequestDto.getEmail());
 
-        int result = loginService.loginAttemptCheck(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-        Optional<MemberSocial> memberSocialByEmail = memberSocialRepository.findMemberByEmail(loginRequestDto.getEmail());
-        if(result == 0) throw new BadLoginCredentialsException(String.valueOf(memberSocialByEmail.get().getLoginFailCount() + 1));
-
+        loginService.loginAttemptCheck(validEmail, loginRequestDto.getPassword());
 
         // Created the authentication token
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-
 
         // when this line of code executes, it will call the loadUserByUsername method in AuthService.
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);

@@ -1,6 +1,6 @@
 package com.memopet.memopet.domain.member.repository;
 
-import com.memopet.memopet.domain.member.dto.MemberInfoRequestDto;
+import com.memopet.memopet.domain.member.dto.MemberInfoUpdateRequestDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
@@ -22,20 +22,17 @@ public class CustomMemberRepositoryImpl implements CustomMemberRepository {
     }
 
     @Override
-    public void UpdateMemberInfo(MemberInfoRequestDto memberInfoRequestDto) {
+    public void UpdateMemberInfo(MemberInfoUpdateRequestDto memberInfoUpdateRequestDto) {
 
-        JPAUpdateClause clause  = queryFactory
-                .update(memberSocial);
-        if(memberPasswordEq(passwordEncoder.encode(memberInfoRequestDto.getPassword())) != null) {
-            clause.set(memberSocial.password, passwordEncoder.encode(memberInfoRequestDto.getPassword()));
+        JPAUpdateClause clause  = queryFactory.update(memberSocial);
+
+        if(memberUsernameEq(memberInfoUpdateRequestDto.getUsername()) != null) {
+            clause.set(memberSocial.username, memberInfoUpdateRequestDto.getUsername());
         }
-        if(memberUsernameEq(memberInfoRequestDto.getUsername()) != null) {
-            clause.set(memberSocial.username, memberInfoRequestDto.getUsername());
+        if(memberPhoneNumEq(memberInfoUpdateRequestDto.getPhoneNum()) != null) {
+            clause.set(memberSocial.phoneNum, memberInfoUpdateRequestDto.getPhoneNum());
         }
-        if(memberPhoneNumEq(memberInfoRequestDto.getPhoneNum()) != null) {
-            clause.set(memberSocial.phoneNum, memberInfoRequestDto.getPhoneNum());
-        }
-        clause.where(memberSocial.email.eq(memberInfoRequestDto.getEmail()));
+        clause.where(memberSocial.email.eq(memberInfoUpdateRequestDto.getEmail()));
         clause.execute();
     }
 

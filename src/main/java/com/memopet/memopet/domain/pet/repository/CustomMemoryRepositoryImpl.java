@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.memopet.memopet.domain.pet.entity.QMemory.memory;
 
@@ -18,13 +20,22 @@ public class CustomMemoryRepositoryImpl implements CustomMemoryRepository{
 
     private final JPAQueryFactory queryFactory;
 
-
     public CustomMemoryRepositoryImpl(EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
     @Override
-    @Transactional(readOnly = false)
+    @Transactional
+    public void deleteAllMemories(List<Long> petIds) {
+        queryFactory.update(memory)
+                .set(memory.deletedDate, LocalDateTime.now())
+                .where(memory.pet.id.in(petIds))
+                .where(memory.deletedDate.isNull())
+                .execute();
+    }
+
+    @Override
+    @Transactional
     public void updateMemoryInfo(MemoryUpdateRequestDto memoryUpdateRequestDto) {
 
         Audience audience = null;

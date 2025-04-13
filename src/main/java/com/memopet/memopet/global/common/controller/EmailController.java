@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -22,21 +21,15 @@ public class EmailController {
 
     @PostMapping("/sign-in/verification")
     public RestResult sendVerificationEmail(@RequestBody EmailAuthRequestDto emailDto) {
-
-        Map<String,Object> hashMap = new LinkedHashMap<>();
-        hashMap.put("response", emailService.sendEmail(emailDto.getEmail()));
-
-        return new RestResult(hashMap);
+        EmailAuthResponseDto emailAuthResponseDto = emailService.sendEmail(emailDto.getEmail());
+        return new RestResult(Map.of("response", emailAuthResponseDto));
     }
 
     @PostMapping("/sign-in/verification-email")
     public RestResult checkVerificationCode(@RequestBody EmailAuthRequestDto emailAuthRequestDto) {
-
         EmailAuthResponseDto emailAuthResponseDto = emailService.checkVerificationCode(emailAuthRequestDto);
-        Map<String,Object> hashMap = new LinkedHashMap<>();
-        hashMap.put("response", emailAuthResponseDto);
 
-        return new RestResult(hashMap);
+        return new RestResult(Map.of("emailAuthResponseDto", emailAuthResponseDto));
     }
 
 }

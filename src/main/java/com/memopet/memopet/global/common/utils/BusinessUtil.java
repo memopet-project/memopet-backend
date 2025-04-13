@@ -2,23 +2,17 @@ package com.memopet.memopet.global.common.utils;
 
 import com.memopet.memopet.domain.member.entity.MemberSocial;
 import com.memopet.memopet.domain.member.entity.MemberStatus;
-import com.memopet.memopet.domain.member.repository.MemberRepository;
 import com.memopet.memopet.domain.member.repository.MemberSocialRepository;
-import com.memopet.memopet.domain.pet.repository.PetRepository;
 import com.memopet.memopet.global.common.exception.BadRequestRuntimeException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class BusinessUtil {
-
-    private final PetRepository petRepository;
-    private final MemberRepository memberRepository;
+    
     private final MemberSocialRepository memberSocialRepository;
     private final String IS_MOBILE = "MOBILE";
     private final String IS_PHONE = "PHONE";
@@ -26,24 +20,26 @@ public class BusinessUtil {
     private final String IS_PC = "PC";
 
     public MemberSocial getValidEmail(String email) {
-        Optional<MemberSocial> memberSocialByEmail = memberSocialRepository.findMemberByEmail(email);
-        if(memberSocialByEmail.isEmpty()) throw new UsernameNotFoundException("User Not Found");
-        return memberSocialByEmail.get();
+        return memberSocialRepository
+                .findMemberByEmail(email)
+                .orElseThrow(()->new UsernameNotFoundException("User Not Found"));
+
     }
 
     public void isAccountLock(String email) {
-        Optional<MemberSocial> memberByEmail = memberSocialRepository.findMemberByEmail(email);
-        if(memberByEmail.isEmpty()) throw new UsernameNotFoundException("User Not Found");
+        MemberSocial memberByEmail = memberSocialRepository
+                .findMemberByEmail(email)
+                .orElseThrow(()->new UsernameNotFoundException("User Not Found"));
 
-        MemberSocial memberSocial = memberByEmail.get();
-        if(memberSocial.getMemberStatus().equals(MemberStatus.LOCKED)) {
+        if(MemberStatus.LOCKED.equals(memberByEmail.getMemberStatus())) {
             throw new BadRequestRuntimeException("Your account is locked because of 5 failed Login attempts");
         }
     }
 
     public void isValidEmail(String email) {
-        Optional<MemberSocial> memberByEmail = memberSocialRepository.findMemberByEmail(email);
-        if(memberByEmail.isEmpty()) throw new UsernameNotFoundException("User Not Found");
+        memberSocialRepository
+                .findMemberByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
     }
 
     public String getOsInfo(HttpServletRequest request) {
@@ -68,7 +64,7 @@ public class BusinessUtil {
     }
 
     /**
-     * 모바일,타블렛,PC구분
+     * Device type distinction: Mobile, Tablet, and PC
      * @param req
      * @return
      */

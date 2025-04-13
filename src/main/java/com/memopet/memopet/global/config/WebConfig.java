@@ -1,6 +1,5 @@
 package com.memopet.memopet.global.config;
 
-import com.memopet.memopet.domain.member.entity.MemberSocial;
 import com.memopet.memopet.domain.member.service.MemberService;
 import com.memopet.memopet.global.common.service.AccessLogRabbitPublisher;
 import com.memopet.memopet.global.common.service.ThreadLocalService;
@@ -29,7 +28,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Configuration
@@ -91,9 +89,8 @@ public class WebConfig implements WebMvcConfigurer {
 
 				final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 				final String username = userDetails.getUsername();
-				final Optional<MemberSocial> memberOptional = memberService.getMemberByEmail(username);
 
-                return memberOptional.orElse(null);
+                return businessUtil.getValidEmail(username);
 
             }
 		};

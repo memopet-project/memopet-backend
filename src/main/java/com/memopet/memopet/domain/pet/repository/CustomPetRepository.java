@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface CustomPetRepository {
     List<PetListResponseDto> findPetsById(Long id);
-
     boolean switchPetProfile(Long petId);
 
     boolean deleteAPet(Long memberId, Long petId);
 
+    boolean deleteAllPets(List<Long> petIds);
     void updateMemoryInfo(String petImgUrl, String backgroundImgUrl, PetUpdateInfoRequestDto petUpdateInfoRequestDto);
 }
