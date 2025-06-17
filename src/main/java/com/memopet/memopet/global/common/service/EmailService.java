@@ -1,70 +1,67 @@
 package com.memopet.memopet.global.common.service;
 
-import com.memopet.memopet.global.common.utils.RedisUtil;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.memopet.memopet.global.common.dto.EmailAuthRequestDto;
+import com.memopet.memopet.global.common.dto.EmailAuthResponseDto;
+import com.memopet.memopet.global.common.dto.EmailMessageDto;
+import com.memopet.memopet.global.common.entity.VerificationStatusEntity;
+import com.memopet.memopet.global.common.exception.BadRequestRuntimeException;
+import com.memopet.memopet.global.common.repository.VertificationStatusRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class EmailService {
-    private final JavaMailSender emailSender ;
-    private final RedisUtil redisUtil;
-    private final String SUBJECT = "[이메일 인증 메일]";
-    private String authNum; //랜덤 인증 코드
+    private final EmailRabbitPublisher emailRabbitPublisher;
+    private final VertificationStatusRepository vertificationStatusRepository;
 
-    public MimeMessage createEmailForm(String email) throws MessagingException, UnsupportedEncodingException  {
-        createCode(); //인증 코드 생성
-        String setFrom = "jaelee9212@naver.com"; //email-config에 설정한 자신의 이메일 주소(보내는 사람)
-        String toEmail = email; //받는 사람
-        String title = SUBJECT; //제목
-
-        MimeMessage message = emailSender.createMimeMessage();
-        message.addRecipients(MimeMessage.RecipientType.TO, toEmail); //보낼 이메일 설정
-        message.setSubject(title); //제목 설정
-        message.setFrom(setFrom); //보내는 이메일
-        message.setText(getCertificationMessage(authNum), "utf-8", "html");
-
-        return message;
-
+    public void sendRequestToRabbitMqForSendingEmail(long id, String email, String authNum) {
+        EmailMessageDto emailMessageDto = EmailMessageDto.builder().auth(authNum).retryCount(0).email(email).id(String.valueOf(id)).build();
+        emailRabbitPublisher.pubsubMessage(emailMessageDto);
     }
-    @Transactional(readOnly = true)
-    //실제 메일 전송
-    public String sendEmail(String toEmail) throws MessagingException, UnsupportedEncodingException {
+    @Transactional(readOnly = false)
 
-        //메일전송에 필요한 정보 설정
-        MimeMessage emailForm = createEmailForm(toEmail);
-        //실제 메일 전송
-        emailSender.send(emailForm);
-        setDataExpire(toEmail, authNum,60 * 1L);
-        return authNum; //인증 코드 반환
+    public EmailAuthResponseDto sendEmail(String toEmail)  {
+        String authNum = createCode();
+        long verificationEntityId = setDataExpire(authNum);
+
+        sendRequestToRabbitMqForSendingEmail(verificationEntityId,toEmail,authNum);
+        //log.info("authNum : {}", authNum);
+
+        // Since the builder pattern can result in more verbose code, it might be worth considering using a constructor instead, depending on the context.
+        return EmailAuthResponseDto.builder().authCode(authNum).verificationStatusId(verificationEntityId).build();
     }
 
-    private void setDataExpire(String email, String authKey, Long duration) {
-        //Redis에 3분동안 인증코드 {email, authKey} 저장
-        try {
-            redisUtil.setDataExpire(email, authKey,duration);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // 에러처리 필요
-        }
+    private long setDataExpire(String authKey) {
+        VerificationStatusEntity verificationStatusEntity = VerificationStatusEntity.builder()
+            .expiredAt(LocalDateTime.now().plusMinutes(3))
+            .authKey(authKey)
+            .build();
+
+        VerificationStatusEntity savedEntity = vertificationStatusRepository.save(verificationStatusEntity);
+
+        return savedEntity.getId();
     }
-    private String getCertificationMessage(String certificationNum) {
-        String certificationMessage = "";
-        certificationMessage += "<h1 style='test-align:certer;'>[이메일 인증 코드]</h1>";
-        certificationMessage += "<h3 style='test-align:certer;'>인증코드 : <strong style='front-size: 32px; letter-spacing:8px;'>" + certificationNum + "</strong></h3>";
-        return certificationMessage;
+
+    public String getCertificationMessage(String certificationNum) {
+        // tip 아래처럼 Text Block 으로 가독성 높게 만들수 있습니다.
+        String message = """
+            <h1 style='test-align:certer;'>[이메일 인증 코드]</h1>
+            <h3 style='test-align:certer;'>인증코드 : <strong style='front-size: 32px; letter-spacing:8px;'>
+            %s
+            </strong></h3>
+            """.formatted(certificationNum);
+       return message;
     }
+
     //랜덤 인증 코드 생성
-    public void createCode() {
+    public static String createCode() {
         Random random = new Random();
         StringBuffer key = new StringBuffer();
 
@@ -83,21 +80,30 @@ public class EmailService {
                     break;
             }
         }
-        authNum = key.toString();
+        String authNum = key.toString();
+        return authNum;
+        // tip 이렇게 멤버변수에 할당하는것보다는 리턴을 받고 활용하는게 나아보입니다. 밖에서 이 메소드를 호출결과로서 랜덤값을 활용할수 있기 때문입니다.
+        // tip 오히려 static method 로 유틸성에 가깝기 때문에 따로 클래스로 빼주는게 좋습니다.
+
     }
 
-    public String checkVerificationCode(String email, String code) {
-        String response = "Verification done successfully";
+    public EmailAuthResponseDto checkVerificationCode(EmailAuthRequestDto emailAuthRequestDto) {
+        //String codeSaved = redisUtil.getValues(email);
+        VerificationStatusEntity verificationStatusEntity = vertificationStatusRepository
+                .findById(emailAuthRequestDto.getVerificationStatusId())
+                .orElseThrow(() -> new BadRequestRuntimeException("verificationStatusId does not exist"));
 
-        String codeSaved = redisUtil.getValues(email);
-        if(codeSaved.equals("false")) {
-            response = "Verification failed : code is expired..";
-            return response;
+
+        log.info("code : " + verificationStatusEntity.getAuthKey());
+
+        if(LocalDateTime.now().isAfter(verificationStatusEntity.getExpiredAt())) {
+            throw new BadRequestRuntimeException("expired");
         }
-        if(!codeSaved.equals(code)) {
-            response = "Verification failed : input code is different";
-            return response;
+
+        if(!emailAuthRequestDto.getConfirmCode().equals(verificationStatusEntity.getAuthKey())) {
+            throw new BadRequestRuntimeException("different");
         }
-        return response;
+
+        return EmailAuthResponseDto.builder().build();
     }
 }
