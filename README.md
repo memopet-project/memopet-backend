@@ -15,8 +15,7 @@ The Memopet Project is a service designed to record a pet's entire lifetime, all
 ---
 
 ## **Role**  
-**Full-stack Developer**  
-- System Design and Implementation  
+** Java Backend Developer**  
 
 ---
 
