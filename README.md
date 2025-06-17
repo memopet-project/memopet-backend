@@ -5,11 +5,12 @@ The Memopet Project is a service designed to record a pet's entire lifetime, all
 
 ---
 
-## **Development Environment**  
-- **Framework**: Spring Boot v3.1.2  
-- **Database**: MySQL  
-- **ORM**: JPA  
-- **Build Tool**: Gradle  
+## Development Environment
+- **Framework & Security**: Spring Boot `v3.2`, Spring Security, OAuth2, JWT  
+- **Database & ORM**: MySQL, JPA, QueryDSL, Redis  
+- **Infrastructure & DevOps**: AWS EC2, S3, RDS, Docker  
+- **Build & Testing**: Gradle, JUnit, Postman  
+- **API & Integration**: REST API, Telegram API
 
 ---
 
