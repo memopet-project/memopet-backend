@@ -1,0 +1,312 @@
+2025-03-20 05:46:49.006 [restartedMain]  INFO p6spy - #1742464009006 | took 47ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table access_log modify column request_at  datetime(6)
+alter table access_log modify column request_at  datetime(6);
+2025-03-20 05:46:49.016 [restartedMain]  INFO p6spy - #1742464009016 | took 7ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table access_log modify column response_at  datetime(6)
+alter table access_log modify column response_at  datetime(6);
+2025-03-20 05:46:49.021 [restartedMain]  INFO p6spy - #1742464009021 | took 4ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table audit modify column created_date  datetime(6)
+alter table audit modify column created_date  datetime(6);
+2025-03-20 05:46:49.029 [restartedMain]  INFO p6spy - #1742464009028 | took 7ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table blocked modify column created_date  datetime(6) not null
+alter table blocked modify column created_date  datetime(6) not null;
+2025-03-20 05:46:49.037 [restartedMain]  INFO p6spy - #1742464009037 | took 8ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column last_modified_date  datetime(6)
+alter table comment modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.044 [restartedMain]  INFO p6spy - #1742464009044 | took 6ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column created_date  datetime(6)
+alter table comment modify column created_date  datetime(6);
+2025-03-20 05:46:49.053 [restartedMain]  INFO p6spy - #1742464009053 | took 9ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column comment_group  enum ('LAST_WORD','MEMORY_COMMENT') not null
+alter table comment modify column comment_group  enum ('LAST_WORD','MEMORY_COMMENT') not null;
+2025-03-20 05:46:49.060 [restartedMain]  INFO p6spy - #1742464009060 | took 6ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column deleted_date  datetime(6)
+alter table comment modify column deleted_date  datetime(6);
+2025-03-20 05:46:49.067 [restartedMain]  INFO p6spy - #1742464009067 | took 6ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table follow modify column last_modified_date  datetime(6)
+alter table follow modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.072 [restartedMain]  INFO p6spy - #1742464009072 | took 5ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table follow modify column created_date  datetime(6)
+alter table follow modify column created_date  datetime(6);
+2025-03-20 05:46:49.080 [restartedMain]  INFO p6spy - #1742464009080 | took 7ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table likes modify column created_date  datetime(6)
+alter table likes modify column created_date  datetime(6);
+2025-03-20 05:46:49.091 [restartedMain]  INFO p6spy - #1742464009091 | took 10ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column last_modified_date  datetime(6)
+alter table member modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.099 [restartedMain]  INFO p6spy - #1742464009099 | took 7ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column created_date  datetime(6)
+alter table member modify column created_date  datetime(6);
+2025-03-20 05:46:49.110 [restartedMain]  INFO p6spy - #1742464009110 | took 11ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column agree_date  datetime(6) not null
+alter table member modify column agree_date  datetime(6) not null;
+2025-03-20 05:46:49.121 [restartedMain]  INFO p6spy - #1742464009121 | took 11ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column deleted_date  datetime(6)
+alter table member modify column deleted_date  datetime(6);
+2025-03-20 05:46:49.131 [restartedMain]  INFO p6spy - #1742464009131 | took 8ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column last_modified_date  datetime(6)
+alter table member_social modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.139 [restartedMain]  INFO p6spy - #1742464009139 | took 8ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column created_date  datetime(6)
+alter table member_social modify column created_date  datetime(6);
+2025-03-20 05:46:49.157 [restartedMain]  INFO p6spy - #1742464009157 | took 17ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column deleted_date  datetime(6)
+alter table member_social modify column deleted_date  datetime(6);
+2025-03-20 05:46:49.171 [restartedMain]  INFO p6spy - #1742464009171 | took 13ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column last_login_date  datetime(6)
+alter table member_social modify column last_login_date  datetime(6);
+2025-03-20 05:46:49.184 [restartedMain]  INFO p6spy - #1742464009184 | took 12ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column member_status  enum ('BAN','LOCKED','NORMAL')
+alter table member_social modify column member_status  enum ('BAN','LOCKED','NORMAL');
+2025-03-20 05:46:49.201 [restartedMain]  INFO p6spy - #1742464009201 | took 16ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column last_modified_date  datetime(6)
+alter table memory modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.227 [restartedMain]  INFO p6spy - #1742464009227 | took 26ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column created_date  datetime(6)
+alter table memory modify column created_date  datetime(6);
+2025-03-20 05:46:49.252 [restartedMain]  INFO p6spy - #1742464009252 | took 24ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column audience  enum ('ALL','FRIEND','ME') not null
+alter table memory modify column audience  enum ('ALL','FRIEND','ME') not null;
+2025-03-20 05:46:49.296 [restartedMain]  INFO p6spy - #1742464009296 | took 44ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column deleted_date  datetime(6)
+alter table memory modify column deleted_date  datetime(6);
+2025-03-20 05:46:49.321 [restartedMain]  INFO p6spy - #1742464009321 | took 23ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory_image modify column created_date  datetime(6)
+alter table memory_image modify column created_date  datetime(6);
+2025-03-20 05:46:49.337 [restartedMain]  INFO p6spy - #1742464009337 | took 16ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory_image modify column deleted_date  datetime(6)
+alter table memory_image modify column deleted_date  datetime(6);
+2025-03-20 05:46:49.345 [restartedMain]  INFO p6spy - #1742464009345 | took 6ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table meta modify column last_modified_date  datetime(6)
+alter table meta modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.354 [restartedMain]  INFO p6spy - #1742464009354 | took 8ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table notification modify column last_modified_date  datetime(6)
+alter table notification modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.364 [restartedMain]  INFO p6spy - #1742464009364 | took 9ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table notification modify column created_date  datetime(6)
+alter table notification modify column created_date  datetime(6);
+2025-03-20 05:46:49.387 [restartedMain]  INFO p6spy - #1742464009387 | took 22ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column last_modified_date  datetime(6)
+alter table pet modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.407 [restartedMain]  INFO p6spy - #1742464009407 | took 20ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column created_date  datetime(6)
+alter table pet modify column created_date  datetime(6);
+2025-03-20 05:46:49.429 [restartedMain]  INFO p6spy - #1742464009429 | took 20ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column deleted_date  datetime(6)
+alter table pet modify column deleted_date  datetime(6);
+2025-03-20 05:46:49.446 [restartedMain]  INFO p6spy - #1742464009446 | took 16ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column gender  enum ('F','M') not null
+alter table pet modify column gender  enum ('F','M') not null;
+2025-03-20 05:46:49.460 [restartedMain]  INFO p6spy - #1742464009460 | took 13ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column pet_status  enum ('ACTIVE','DEACTIVE') not null
+alter table pet modify column pet_status  enum ('ACTIVE','DEACTIVE') not null;
+2025-03-20 05:46:49.478 [restartedMain]  INFO p6spy - #1742464009478 | took 5ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table recent_search modify column created_date  datetime(6)
+alter table recent_search modify column created_date  datetime(6);
+2025-03-20 05:46:49.484 [restartedMain]  INFO p6spy - #1742464009484 | took 5ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table refresh_token modify column expired_at  datetime(6)
+alter table refresh_token modify column expired_at  datetime(6);
+2025-03-20 05:46:49.489 [restartedMain]  INFO p6spy - #1742464009489 | took 5ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table report modify column created_date  datetime(6)
+alter table report modify column created_date  datetime(6);
+2025-03-20 05:46:49.497 [restartedMain]  INFO p6spy - #1742464009497 | took 7ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table species modify column last_modified_date  datetime(6)
+alter table species modify column last_modified_date  datetime(6);
+2025-03-20 05:46:49.501 [restartedMain]  INFO p6spy - #1742464009501 | took 4ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table verification_status_entity modify column expired_at  datetime(6)
+alter table verification_status_entity modify column expired_at  datetime(6);
+2025-03-20 05:46:49.511 [restartedMain]  INFO p6spy - #1742464009511 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.527 [restartedMain]  INFO p6spy - #1742464009527 | took 4ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`memory` where 1=0
+select * from `mymemopetdb`.`memory` where 1=0;
+2025-03-20 05:46:49.532 [restartedMain]  INFO p6spy - #1742464009532 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.537 [restartedMain]  INFO p6spy - #1742464009537 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.542 [restartedMain]  INFO p6spy - #1742464009542 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`memory` where 1=0
+select * from `mymemopetdb`.`memory` where 1=0;
+2025-03-20 05:46:49.544 [restartedMain]  INFO p6spy - #1742464009544 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.549 [restartedMain]  INFO p6spy - #1742464009549 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.554 [restartedMain]  INFO p6spy - #1742464009554 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`memory` where 1=0
+select * from `mymemopetdb`.`memory` where 1=0;
+2025-03-20 05:46:49.559 [restartedMain]  INFO p6spy - #1742464009559 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.571 [restartedMain]  INFO p6spy - #1742464009571 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`member` where 1=0
+select * from `mymemopetdb`.`member` where 1=0;
+2025-03-20 05:46:49.573 [restartedMain]  INFO p6spy - #1742464009573 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`species` where 1=0
+select * from `mymemopetdb`.`species` where 1=0;
+2025-03-20 05:46:49.585 [restartedMain]  INFO p6spy - #1742464009585 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:49.590 [restartedMain]  INFO p6spy - #1742464009590 | took 0ms | statement | connection 8| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`member_social` where 1=0
+select * from `mymemopetdb`.`member_social` where 1=0;
+2025-03-20 05:46:54.620 [restartedMain]  INFO p6spy - #1742464014620 | took 9ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table access_log modify column request_at  datetime(6)
+alter table access_log modify column request_at  datetime(6);
+2025-03-20 05:46:54.626 [restartedMain]  INFO p6spy - #1742464014626 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table access_log modify column response_at  datetime(6)
+alter table access_log modify column response_at  datetime(6);
+2025-03-20 05:46:54.630 [restartedMain]  INFO p6spy - #1742464014630 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table audit modify column created_date  datetime(6)
+alter table audit modify column created_date  datetime(6);
+2025-03-20 05:46:54.634 [restartedMain]  INFO p6spy - #1742464014634 | took 3ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table blocked modify column created_date  datetime(6) not null
+alter table blocked modify column created_date  datetime(6) not null;
+2025-03-20 05:46:54.641 [restartedMain]  INFO p6spy - #1742464014641 | took 6ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column last_modified_date  datetime(6)
+alter table comment modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.645 [restartedMain]  INFO p6spy - #1742464014645 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column created_date  datetime(6)
+alter table comment modify column created_date  datetime(6);
+2025-03-20 05:46:54.649 [restartedMain]  INFO p6spy - #1742464014649 | took 3ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column comment_group  enum ('LAST_WORD','MEMORY_COMMENT') not null
+alter table comment modify column comment_group  enum ('LAST_WORD','MEMORY_COMMENT') not null;
+2025-03-20 05:46:54.654 [restartedMain]  INFO p6spy - #1742464014654 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table comment modify column deleted_date  datetime(6)
+alter table comment modify column deleted_date  datetime(6);
+2025-03-20 05:46:54.658 [restartedMain]  INFO p6spy - #1742464014658 | took 3ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table follow modify column last_modified_date  datetime(6)
+alter table follow modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.662 [restartedMain]  INFO p6spy - #1742464014662 | took 3ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table follow modify column created_date  datetime(6)
+alter table follow modify column created_date  datetime(6);
+2025-03-20 05:46:54.666 [restartedMain]  INFO p6spy - #1742464014666 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table likes modify column created_date  datetime(6)
+alter table likes modify column created_date  datetime(6);
+2025-03-20 05:46:54.673 [restartedMain]  INFO p6spy - #1742464014673 | took 6ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column last_modified_date  datetime(6)
+alter table member modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.680 [restartedMain]  INFO p6spy - #1742464014680 | took 6ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column created_date  datetime(6)
+alter table member modify column created_date  datetime(6);
+2025-03-20 05:46:54.686 [restartedMain]  INFO p6spy - #1742464014686 | took 6ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column agree_date  datetime(6) not null
+alter table member modify column agree_date  datetime(6) not null;
+2025-03-20 05:46:54.693 [restartedMain]  INFO p6spy - #1742464014693 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member modify column deleted_date  datetime(6)
+alter table member modify column deleted_date  datetime(6);
+2025-03-20 05:46:54.698 [restartedMain]  INFO p6spy - #1742464014698 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column last_modified_date  datetime(6)
+alter table member_social modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.704 [restartedMain]  INFO p6spy - #1742464014704 | took 6ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column created_date  datetime(6)
+alter table member_social modify column created_date  datetime(6);
+2025-03-20 05:46:54.710 [restartedMain]  INFO p6spy - #1742464014710 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column deleted_date  datetime(6)
+alter table member_social modify column deleted_date  datetime(6);
+2025-03-20 05:46:54.717 [restartedMain]  INFO p6spy - #1742464014717 | took 6ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column last_login_date  datetime(6)
+alter table member_social modify column last_login_date  datetime(6);
+2025-03-20 05:46:54.723 [restartedMain]  INFO p6spy - #1742464014723 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table member_social modify column member_status  enum ('BAN','LOCKED','NORMAL')
+alter table member_social modify column member_status  enum ('BAN','LOCKED','NORMAL');
+2025-03-20 05:46:54.731 [restartedMain]  INFO p6spy - #1742464014731 | took 7ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column last_modified_date  datetime(6)
+alter table memory modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.738 [restartedMain]  INFO p6spy - #1742464014738 | took 7ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column created_date  datetime(6)
+alter table memory modify column created_date  datetime(6);
+2025-03-20 05:46:54.745 [restartedMain]  INFO p6spy - #1742464014745 | took 7ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column audience  enum ('ALL','FRIEND','ME') not null
+alter table memory modify column audience  enum ('ALL','FRIEND','ME') not null;
+2025-03-20 05:46:54.753 [restartedMain]  INFO p6spy - #1742464014753 | took 7ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory modify column deleted_date  datetime(6)
+alter table memory modify column deleted_date  datetime(6);
+2025-03-20 05:46:54.757 [restartedMain]  INFO p6spy - #1742464014757 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory_image modify column created_date  datetime(6)
+alter table memory_image modify column created_date  datetime(6);
+2025-03-20 05:46:54.762 [restartedMain]  INFO p6spy - #1742464014762 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table memory_image modify column deleted_date  datetime(6)
+alter table memory_image modify column deleted_date  datetime(6);
+2025-03-20 05:46:54.765 [restartedMain]  INFO p6spy - #1742464014765 | took 3ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table meta modify column last_modified_date  datetime(6)
+alter table meta modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.770 [restartedMain]  INFO p6spy - #1742464014770 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table notification modify column last_modified_date  datetime(6)
+alter table notification modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.774 [restartedMain]  INFO p6spy - #1742464014774 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table notification modify column created_date  datetime(6)
+alter table notification modify column created_date  datetime(6);
+2025-03-20 05:46:54.788 [restartedMain]  INFO p6spy - #1742464014788 | took 13ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column last_modified_date  datetime(6)
+alter table pet modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.799 [restartedMain]  INFO p6spy - #1742464014799 | took 11ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column created_date  datetime(6)
+alter table pet modify column created_date  datetime(6);
+2025-03-20 05:46:54.810 [restartedMain]  INFO p6spy - #1742464014810 | took 10ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column deleted_date  datetime(6)
+alter table pet modify column deleted_date  datetime(6);
+2025-03-20 05:46:54.820 [restartedMain]  INFO p6spy - #1742464014820 | took 10ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column gender  enum ('F','M') not null
+alter table pet modify column gender  enum ('F','M') not null;
+2025-03-20 05:46:54.832 [restartedMain]  INFO p6spy - #1742464014832 | took 11ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table pet modify column pet_status  enum ('ACTIVE','DEACTIVE') not null
+alter table pet modify column pet_status  enum ('ACTIVE','DEACTIVE') not null;
+2025-03-20 05:46:54.837 [restartedMain]  INFO p6spy - #1742464014837 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table recent_search modify column created_date  datetime(6)
+alter table recent_search modify column created_date  datetime(6);
+2025-03-20 05:46:54.841 [restartedMain]  INFO p6spy - #1742464014841 | took 4ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table refresh_token modify column expired_at  datetime(6)
+alter table refresh_token modify column expired_at  datetime(6);
+2025-03-20 05:46:54.845 [restartedMain]  INFO p6spy - #1742464014845 | took 3ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table report modify column created_date  datetime(6)
+alter table report modify column created_date  datetime(6);
+2025-03-20 05:46:54.851 [restartedMain]  INFO p6spy - #1742464014851 | took 5ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table species modify column last_modified_date  datetime(6)
+alter table species modify column last_modified_date  datetime(6);
+2025-03-20 05:46:54.854 [restartedMain]  INFO p6spy - #1742464014854 | took 2ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+alter table verification_status_entity modify column expired_at  datetime(6)
+alter table verification_status_entity modify column expired_at  datetime(6);
+2025-03-20 05:46:54.862 [restartedMain]  INFO p6spy - #1742464014862 | took 1ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.867 [restartedMain]  INFO p6spy - #1742464014867 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`memory` where 1=0
+select * from `mymemopetdb`.`memory` where 1=0;
+2025-03-20 05:46:54.868 [restartedMain]  INFO p6spy - #1742464014868 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.872 [restartedMain]  INFO p6spy - #1742464014872 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.877 [restartedMain]  INFO p6spy - #1742464014877 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`memory` where 1=0
+select * from `mymemopetdb`.`memory` where 1=0;
+2025-03-20 05:46:54.878 [restartedMain]  INFO p6spy - #1742464014878 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.883 [restartedMain]  INFO p6spy - #1742464014883 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.887 [restartedMain]  INFO p6spy - #1742464014887 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`memory` where 1=0
+select * from `mymemopetdb`.`memory` where 1=0;
+2025-03-20 05:46:54.892 [restartedMain]  INFO p6spy - #1742464014892 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.896 [restartedMain]  INFO p6spy - #1742464014896 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`member` where 1=0
+select * from `mymemopetdb`.`member` where 1=0;
+2025-03-20 05:46:54.897 [restartedMain]  INFO p6spy - #1742464014897 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`species` where 1=0
+select * from `mymemopetdb`.`species` where 1=0;
+2025-03-20 05:46:54.901 [restartedMain]  INFO p6spy - #1742464014901 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`pet` where 1=0
+select * from `mymemopetdb`.`pet` where 1=0;
+2025-03-20 05:46:54.905 [restartedMain]  INFO p6spy - #1742464014905 | took 0ms | statement | connection 11| url jdbc:mysql://localhost:3306/mymemopetdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+select * from `mymemopetdb`.`member_social` where 1=0
+select * from `mymemopetdb`.`member_social` where 1=0;
